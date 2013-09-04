@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/TowerOfZaldagor.leveleditor/src"
+    modelPluginID="TowerOfZaldagor.leveleditor" modelName="Leveleditor" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" copyrightFields="false">
+  <foreignModel>Leveleditor.ecore</foreignModel>
+  <genPackages prefix="Leveleditor" disposableProviderFactory="true" ecorePackage="Leveleditor.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Leveleditor.ecore#//ERoomEventCondition">
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventCondition/ENEMY_DIED"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventCondition/ITEM_USED"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventCondition/HIDDENROOM_FOUND"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventCondition/ITEM_GIVEN"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventCondition/ITEM_TAKEN"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventCondition/ROOM_ENTERED_TWICE"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventCondition/ROOM_ENTERED"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventCondition/FINISHED_DIALOG"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Leveleditor.ecore#//ERoomEventAction">
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/ENEMY_ATTACK"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/ROOM_DESCRIPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/HIDDENROOM_FOUND"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/ROOM_PLACEENEMY"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/TRIGGER_TRAP"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/ADD_ITEM"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/REMOVE_ENEMY"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/REMOVE_NPC"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/SET_HP_ENEMY"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/MOVE_PLAYER"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/NPC_TALK"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/CANCEL_ACCESSORY"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/UNLOCK_DOOR"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/SOLVE_QUEST_ENTERROOM"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ERoomEventAction/ADD_QUEST"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Leveleditor.ecore#//ECreatureClass">
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureClass/Warrior"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureClass/Wizard"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureClass/Paladin"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureClass/Assasin"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureClass/Warlock"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureClass/IceWizard"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Leveleditor.ecore#//ECreatureRace">
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureRace/Human"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureRace/Orc"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureRace/Goblin"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureRace/Elf"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureRace/Rat"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureRace/DarkOrc"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureRace/Wererat"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureRace/Hellhound"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureRace/Troll"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureRace/Undead"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ECreatureRace/Reptile"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Leveleditor.ecore#//EElement">
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//EElement/LIGHTNING"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//EElement/POISON"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//EElement/FIRE"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//EElement/ICE"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//EElement/NORMAL"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Leveleditor.ecore#//ESkill">
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ESkill/STRENGTH"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ESkill/AGILITY"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ESkill/CHARISMA"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ESkill/MANA"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//ESkill/HP"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Leveleditor.ecore#//EArmorType">
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//EArmorType/HEAD"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//EArmorType/BODY"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//EArmorType/LEGGINS"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Leveleditor.ecore#//EAura">
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//EAura/REGEN_MANA"/>
+      <genEnumLiterals ecoreEnumLiteral="Leveleditor.ecore#//EAura/REGEN_HP"/>
+    </genEnums>
+    <genClasses ecoreClass="Leveleditor.ecore#//Act">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Act/world"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Act/actName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Act/gotoAct"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Act/description"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Leveleditor.ecore#//Room">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Room/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Room/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Room/postDescription"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Room/postItemsDescription"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Room/revealedDescription"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Room/hiddenDescription"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Room/enemies"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Room/npcs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Room/items"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Room/isLocked"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Room/unlockKeys"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Room/isHidden"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Room/isRevealed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Room/isHiddenEvent"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Room/north"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Room/south"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Room/west"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Room/east"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Room/autosave"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//NPC">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//NPC/dialogcontroller"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//NPC/talking"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//NPC/firsttime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//NPC/gotoId"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Leveleditor.ecore#//Item">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Item/name"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//Key">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Key/id"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//EventRoom">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//EventRoom/events"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//EventRoom/quest"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//RoomEvent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//RoomEvent/condition"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//RoomEvent/action"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//RoomEvent/isEnemyDead"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//RoomEvent/isItemused"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//RoomEvent/itemtaken"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//RoomEvent/isItemtaken"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//RoomEvent/roomenteredtimes"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//RoomEvent/enemyattack"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//RoomEvent/roomdescription"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//RoomEvent/trap"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//RoomEvent/trapdescription"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//RoomEvent/receivedItem"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//RoomEvent/itemUsed"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//RoomEvent/placeenemy"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//RoomEvent/room"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//RoomEvent/npc"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//RoomEvent/HP"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//RoomEvent/finishedtalking"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//RoomEvent/npcGotoId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference Leveleditor.ecore#//RoomEvent/hiddenroomfound"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//RoomEvent/quest"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//Trap">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Trap/poison"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Trap/fire"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Trap/ice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Trap/lightning"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Trap/normal"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Trap/trapagility"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Trap/trapdescription"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Trap/type"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Leveleditor.ecore#//Creature">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/initHp"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/initMana"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/mana"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/strength"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/agility"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/charisma"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/level"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Creature/inventory"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/experience"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/gold"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/initPlayerActions"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/resistLightning"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/resistFire"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/resistPoison"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/resistIce"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/isMale"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/race"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/creatureClass"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Creature/armor"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//Enemy">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Enemy/isAttacking"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Enemy/scarefactor"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Enemy/damageFire"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Enemy/damageLightning"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Enemy/damageIce"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Enemy/damagePoison"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Enemy/auras"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Enemy/boss"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//DialogController">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//DialogController/conversation"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//DialogChoices">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//DialogChoices/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//DialogChoices/choices"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//Dialog">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Dialog/optiontext"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Dialog/answertext"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Dialog/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Dialog/gotoId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Dialog/isFinal"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Dialog/dialogskilltest"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Dialog/giveItem"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Dialog/item"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Dialog/quest"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Dialog/isAttacking"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Dialog/event"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//DialogSkillTest">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//DialogSkillTest/skill"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//DialogSkillTest/gotoIdSuccess"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//DialogSkillTest/gotoIdFail"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//DialogSkillTest/skillNPC"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//DialogSkillTest/sucessText"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//DialogSkillTest/failText"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//Gold">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Gold/ammount"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//Potion">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Potion/skill"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Potion/addSkill"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//Weapon">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Weapon/damage"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Weapon/isTwohanded"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Weapon/damageLightning"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Weapon/damageFire"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Weapon/damagePoison"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Weapon/damageIce"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Weapon/classes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Weapon/hp"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Weapon/mana"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Weapon/strength"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Weapon/agility"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Weapon/charisma"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//Armor">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Armor/armor"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Armor/armorType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Armor/resistLightning"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Armor/resistIce"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Armor/resistFire"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Armor/resistPoison"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Armor/classes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Armor/hp"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Armor/mana"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Armor/strength"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Armor/agility"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Armor/charisma"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//FinalRoom">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//FinalRoom/isFinal"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//Quest">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Quest/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Quest/introduction"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Quest/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Quest/completeText"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Quest/questCondition"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Quest/questItem"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Quest/isComplete"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Quest/xpEarned"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Quest/awardItem"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Quest/npcGivenby"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Quest/enemydead"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Quest/dialogid"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Quest/room"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//Accessory">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Leveleditor.ecore#//Accessory/room"/>
+    </genClasses>
+    <genClasses ecoreClass="Leveleditor.ecore#//Aura">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Aura/auraType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Leveleditor.ecore#//Aura/ammount"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

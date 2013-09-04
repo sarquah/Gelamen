@@ -1,0 +1,1357 @@
+<%@ jet package="templates" imports="Leveleditor.*" class="TOZModel"%>
+<% 
+	Act act = (Act) argument;
+%>
+{
+	"act": {
+		"actname":"<%= act.getActName()%>",
+		"description":"<%=act.getDescription()%>",
+		<%if (act.getGotoAct() != null)
+		{%>
+		"gotoact":"<%= act.getGotoAct().getActName()%>",
+		<%}%>
+		"world": {	
+			"EventRoom": [<%for (Room room : act.getWorld()) {%>
+			{			
+				"name":"<%=room.getName()%>",
+				"description":"<%=room.getDescription()%>",
+				"isHidden":<%=room.isIsHidden()%>,
+				"hasHiddenEvent":<%=room.isIsHiddenEvent()%>,
+				"autosave":<%=room.isAutosave()%>,
+				"locked":<%=room.isIsLocked()%>,
+				"revealed":<%=room.isIsRevealed()%>,
+				<%if ((room.getPostDescription()!=null) && (room.getPostDescription()!=""))
+				{%>
+				"postdescription":"<%=room.getPostDescription()%>",
+				<%}%>
+				<%if ((room.getPostItemsDescription()!=null) && (room.getPostItemsDescription()!=""))
+				{%>
+				"postitemsdescription":"<%=room.getPostItemsDescription()%>",
+				<%}%>
+				<%if ((room.getRevealedDescription()!=null) && (room.getRevealedDescription()!=""))
+				{%>
+				"revealeddescription":"<%=room.getRevealedDescription()%>",
+				<%}%>
+				<%if ((room.getHiddenDescription()!=null) && (room.getHiddenDescription()!=""))
+				{%>
+				"hiddendescription":"<%=room.getHiddenDescription()%>",
+				<%}%>
+				<%if (room.getEast()!=null)
+				{%>
+				"east":"<%=room.getEast().getName()%>",
+				<%}%>
+				<%if (room.getWest()!=null)
+				{%>
+				"west":"<%=room.getWest().getName()%>",
+				<%}%>
+				<%if (room.getSouth()!=null)
+				{%>
+				"south":"<%=room.getSouth().getName()%>",
+				<%}%>
+				<%if (room.getNorth()!=null)
+				{%>
+				"north":"<%=room.getNorth().getName()%>",
+				<%}%>			
+				<%if (room.getItems().size()>0) {%>
+				"items": [
+				<%}
+				for (Item item : room.getItems()) 
+				{%>				
+				{
+				<%if (item instanceof Key)
+				{				
+				Key key = (Key) item;%>
+				"key": {
+					"id":"<%=key.getId()%>",
+					"name":"<%=key.getName()%>"
+				}
+				<%}
+				else if (item instanceof Gold)
+				{
+				Gold gold = (Gold) item;%>
+				"gold": {
+					"name":"<%=gold.getName()%>",
+					"ammount":<%=gold.getAmmount()%>
+				}
+				<%}
+				else if (item instanceof Weapon)
+				{
+				Weapon weapon = (Weapon) item;%>
+				"weapon": {
+					"name":"<%=weapon.getName()%>",
+					"isTwohanded":<%=weapon.isIsTwohanded()%>,
+					"damage":<%=weapon.getDamage()%>,
+					"damagefire":<%=weapon.getDamageFire()%>,
+					"damageice":<%=weapon.getDamageIce()%>,
+					"damagelightning":<%=weapon.getDamageLightning()%>,
+					"damagepoison":<%=weapon.getDamagePoison()%>,
+					"hp":<%=weapon.getHp()%>,
+					"mana":<%=weapon.getMana()%>,
+					"strength":<%=weapon.getStrength()%>,
+					"agility":<%=weapon.getAgility()%>,
+					"charisma":<%=weapon.getCharisma()%>,
+					"classes":[						
+					<%for (ECreatureClass creatureclass : weapon.getClasses())
+					{%>
+						"<%=creatureclass%>"<%if (weapon.getClasses().indexOf(creatureclass)!=weapon.getClasses().size()-1) {%>,<%}%>
+					<%}%>
+					]
+				}
+				<%}
+				else if (item instanceof Armor)
+				{
+				Armor armor = (Armor) item;%>
+				"armor":{
+					"name":"<%=armor.getName()%>",
+					"armorpoints":<%=armor.getArmor()%>,
+					"armortype":"<%=armor.getArmorType()%>",
+					"resistfire":<%=armor.getResistFire()%>,
+					"resistice":<%=armor.getResistIce()%>,
+					"resistpoison":<%=armor.getResistPoison()%>,
+					"resistlightning":<%=armor.getResistLightning()%>,
+					"hp":<%=armor.getHp()%>,
+					"mana":<%=armor.getMana()%>,
+					"strength":<%=armor.getStrength()%>
+					"agility":<%=armor.getAgility()%>
+					"charisma":<%=armor.getCharisma()%>
+					"classes": [
+					<%for (ECreatureClass creatureclass : armor.getClasses())
+					{%>
+						"<%=creatureclass%>"<%if (armor.getClasses().indexOf(creatureclass)!=armor.getClasses().size()-1) {%>,<%}%>
+					<%}%>
+					]
+				}				
+				<%}
+				else if (item instanceof Potion)
+				{
+				Potion potion = (Potion) item;%>
+				"potion":{
+					"name":"<%=potion.getName()%>",
+					"addskill":<%=potion.getAddSkill()%>,
+					"skill":"<%=potion.getSkill()%>"
+				}				
+				<%}
+				else if (item instanceof Accessory)
+				{
+				Accessory accessory = (Accessory) item;%>
+				"accessorry":{				
+					"name":"<%=accessory.getName()%>",
+					<%if (accessory.getRoom()!=null)
+					{%>
+					"room":"<%=accessory.getRoom().getName()%>"
+					<%}%>
+				}
+				<%}%>
+				<%if (room.getItems().indexOf(item)!=room.getItems().size()-1) {%>,<%}%>
+				<%}%>											
+				<%for (Key unlockkey : room.getUnlockKeys()) 
+				{%>
+				"unlockkey":{				
+					"id":"<%=unlockkey.getId()%>",
+					"name":"<%=unlockkey.getName()%>"
+				}<%if (room.getUnlockKeys().indexOf(unlockkey)!=room.getUnlockKeys().size()-1) {%>,<%}%>
+				<%}%>
+				}],			
+				<%for (NPC npc : room.getNpcs()) 
+				{%>
+				"npc":{
+					"name":"<%=npc.getName()%>",
+					"talking":<%=npc.isTalking()%>,
+					"firsttime":<%=npc.isFirsttime()%>,
+					"gotoid":<%=npc.getGotoId()%>,
+					"agility":<%=npc.getAgility()%>,
+					"armor":<%=npc.getArmor()%>,
+					"creatureclass":<%=npc.getCreatureClass()%>,			
+					"gold":<%=npc.getGold()%>,
+					"initplayeractions":<%=npc.getInitPlayerActions()%>,
+					"inithp":<%=npc.getInitHp()%>,
+					"initmana":<%=npc.getInitMana()%>,
+					"level":<%=npc.getLevel()%>,
+					"male":<%=npc.isIsMale()%>,
+					"mana":<%=npc.getMana()%>,
+					"race":<%=npc.getRace()%>,
+					"resistfire":<%=npc.getResistFire()%>,
+					"resistice":<%=npc.getResistIce()%>,
+					"resistlightning":<%=npc.getResistLightning()%>,
+					"resistpoison":<%=npc.getResistPoison()%>,
+					"strength":<%=npc.getStrength()%>,
+					<%for (DialogChoices dialogChoices : npc.getDialogcontroller().getConversation()) 
+					{%>
+					"dialogschoices":{
+						"id":<%=dialogChoices.getId()%>,
+						<%for (Dialog dialog : dialogChoices.getChoices()) 
+						{%>	
+						"dialog":{					
+							"id":<%=dialog.getId()%>,
+							"optiontext":"<%=dialog.getOptiontext()%>",
+							"answertext":"<%=dialog.getAnswertext()%>",
+							"gotoid":<%=dialog.getGotoId()%>,
+							"attacking":<%=dialog.isIsAttacking()%>,
+							"event":<%=dialog.isEvent()%>,
+							<%if (dialog.getQuest() != null)
+							{%>							
+							"quest":{
+								"id":<%=dialog.getQuest().getId()%>,
+								"introduction":"<%=dialog.getQuest().getIntroduction()%>",
+								"description":"<%=dialog.getQuest().getDescription()%>",
+								"completetext":"<%=dialog.getQuest().getCompleteText()%>",
+								"xpearned":<%=dialog.getQuest().getXpEarned()%>,
+								"questcondition":<%=dialog.getQuest().getQuestCondition()%>,
+								<%if (dialog.getQuest().getNpcGivenby() != null)
+								{%>
+								"givenby":"<%=dialog.getQuest().getNpcGivenby().getName()%>",
+								<%}%>
+								<%if (dialog.getQuest().getEnemydead() != null)
+								{%>
+								"enemydead":"<%=dialog.getQuest().getEnemydead().getName()%>",
+								<%}%>
+								"dialogid":<%=dialog.getQuest().getDialogid()%>,								
+								<%if (dialog.getQuest().getQuestItem() != null)
+								{%>
+								"questitem":"<%=dialog.getQuest().getQuestItem().getName()%>",
+								<%}%>							
+								<%if (dialog.getQuest().getAwardItem() != null)
+								{
+								Item item = dialog.getQuest().getAwardItem();%>
+								"awarditem":{
+								<%if (item instanceof Key)
+								{
+									Key key = (Key) item;%>
+									"key":{
+										"id":"<%=key.getId()%>",
+										"name":"<%=key.getName()%>"
+									},
+								<%}
+								else if (item instanceof Gold)
+								{
+									Gold gold = (Gold) item;%>
+									"gold":{
+										"name":"<%=gold.getName()%>",
+										"ammount":<%=gold.getAmmount()%>
+									},
+								<%}
+								else if (item instanceof Weapon)
+								{
+									Weapon weapon = (Weapon) item;%>
+									"weapon":{
+										"name":"<%=weapon.getName()%>",
+										"twohanded":<%=weapon.isIsTwohanded()%>,
+										"damage":<%=weapon.getDamage()%>,
+										"damagefire":<%=weapon.getDamageFire()%>,
+										"damageice":<%=weapon.getDamageIce()%>,
+										"damagelightning":<%=weapon.getDamageLightning()%>,
+										"damagepoison":<%=weapon.getDamagePoison()%>,
+										"hp":<%=weapon.getHp()%>,
+										"mana":<%=weapon.getMana()%>,
+										"strength":<%=weapon.getStrength()%>,
+										"agility":<%=weapon.getAgility()%>,
+										"charisma":<%=weapon.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : weapon.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (weapon.getClasses().indexOf(creatureclass)!=weapon.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									},
+								<%}
+								else if (item instanceof Armor)
+								{
+									Armor armor = (Armor) item;%>
+									"armor":{
+										"name":"<%=armor.getName()%>",
+										"armor":<%=armor.getArmor()%>,
+										"armortype":<%=armor.getArmorType()%>,
+										"resistfire":<%=armor.getResistFire()%>,
+										"resistice":<%=armor.getResistIce()%>,
+										"resistpoison":<%=armor.getResistPoison()%>,
+										"resistlightning":<%=armor.getResistLightning()%>,
+										"hp":<%=armor.getHp()%>,
+										"mana":<%=armor.getMana()%>,
+										"strength":<%=armor.getStrength()%>,
+										"agility":<%=armor.getAgility()%>,
+										"charisma":<%=armor.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : armor.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (armor.getClasses().indexOf(creatureclass)!=armor.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									},
+								<%}
+								else if (item instanceof Potion)
+								{
+									Potion potion = (Potion) item;%>
+									"potion":{
+										"name":"<%=potion.getName()%>",
+										"addskill":<%=potion.getAddSkill()%>,
+										"skill":"<%=potion.getSkill()%>",
+									},
+								<%}
+								else if (item instanceof Accessory)
+								{
+									Accessory accessory = (Accessory) item;%>
+									"accessory":{
+										"name":"<%=accessory.getName()%>",
+									<%if (accessory.getRoom()!=null)
+									{%>
+										"room":"<%=accessory.getRoom().getName()%>"
+									<%}%>
+									},
+								<%}
+								}%>
+								<%if (dialog.getQuest().getRoom()!=null)
+								{%>									
+									"questroom":"<%=dialog.getQuest().getRoom().getName()%>"
+								<%}%>
+							},
+							<%}%>
+							<%if (dialog.getDialogskilltest() != null)
+							{%>
+							"dialogskilltest":{
+								"eskill":"<%=dialog.getDialogskilltest().getSkill()%>",
+								"failtext":"<%=dialog.getDialogskilltest().getFailText()%>",
+								"successtext":"<%=dialog.getDialogskilltest().getSucessText()%>",
+								"gotoidfail":<%=dialog.getDialogskilltest().getGotoIdFail()%>,
+								"gotoidsuccess":<%=dialog.getDialogskilltest().getGotoIdSuccess()%>,
+								"skillnpc":<%=dialog.getDialogskilltest().getSkillNPC()%>
+							}
+							<%}%>
+							<% if (dialog.isIsFinal())
+							{%>
+							"dialogfinal":<%=dialog.isIsFinal()%>
+							<%}%>						
+							<%if (dialog.isGiveItem())
+							{%>
+							"giveitem":{
+								<%Item item = dialog.getItem();
+								if (item instanceof Key)
+								{
+									Key key = (Key) item;%>								
+									"key":{
+										"id":"<%=key.getId()%>",
+										"name":"<%=key.getName()%>"
+									}
+								<%}
+								else if (item instanceof Gold)
+								{
+									Gold gold = (Gold) item;%>
+									"gold":{
+										"name":"<%=gold.getName()%>",
+										"ammount":<%=gold.getAmmount()%>
+									}
+								<%}
+								else if (item instanceof Weapon)
+								{
+									Weapon weapon = (Weapon) item;%>
+									"weapon":{
+										"name":"<%=weapon.getName()%>",
+										"twohanded":<%=weapon.isIsTwohanded()%>,
+										"damage":<%=weapon.getDamage()%>,
+										"damagefire":<%=weapon.getDamageFire()%>,
+										"damageice":<%=weapon.getDamageIce()%>,
+										"damagelightning":<%=weapon.getDamageLightning()%>,
+										"damagepoison":<%=weapon.getDamagePoison()%>,
+										"hp":<%=weapon.getHp()%>,
+										"mana":<%=weapon.getMana()%>,
+										"strength":<%=weapon.getStrength()%>,
+										"agility":<%=weapon.getAgility()%>,
+										"charisma":<%=weapon.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : weapon.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (weapon.getClasses().indexOf(creatureclass)!=weapon.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}
+								else if (item instanceof Armor)
+								{
+									Armor armor = (Armor) item;%>
+									"armor":{
+										"name":"<%=armor.getName()%>",
+										"armor":<%=armor.getArmor()%>,
+										"armortype":<%=armor.getArmorType()%>,
+										"resistfire":<%=armor.getResistFire()%>,
+										"resistice":<%=armor.getResistIce()%>,
+										"resistpoison":<%=armor.getResistPoison()%>,
+										"resistlightning":<%=armor.getResistLightning()%>,
+										"hp":<%=armor.getHp()%>,
+										"mana":<%=armor.getMana()%>,
+										"strength":<%=armor.getStrength()%>,
+										"agility":<%=armor.getAgility()%>,
+										"charisma":<%=armor.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : armor.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (armor.getClasses().indexOf(creatureclass)!=armor.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}	
+								else if (item instanceof Potion)
+								{
+									Potion potion = (Potion) item;%>
+									"potion":{
+										"name":"<%=potion.getName()%>",
+										"addskill":<%=potion.getAddSkill()%>,
+										"skill":"<%=potion.getSkill()%>",
+									}
+								<%}
+								else if (item instanceof Accessory)
+								{
+									Accessory accessory = (Accessory) item;%>
+									"accessory":{
+										"name":"<%=accessory.getName()%>",
+									<%if (accessory.getRoom()!=null)
+									{%>
+										"room":"<%=accessory.getRoom().getName()%>"
+									<%}%>
+									}
+								<%}
+								}%>					
+							}
+						<%}%>
+						}
+					<%}%>
+					}
+					
+					<%for (Item item : npc.getInventory()) 
+					{%>
+					"items":{
+						<%if (item instanceof Key)
+								{
+									Key key = (Key) item;%>								
+									"key":{
+										"id":"<%=key.getId()%>",
+										"name":"<%=key.getName()%>"
+									}
+								<%}
+								else if (item instanceof Gold)
+								{
+									Gold gold = (Gold) item;%>
+									"gold":{
+										"name":"<%=gold.getName()%>",
+										"ammount":<%=gold.getAmmount()%>
+									}
+								<%}
+								else if (item instanceof Weapon)
+								{
+									Weapon weapon = (Weapon) item;%>
+									"weapon":{
+										"name":"<%=weapon.getName()%>",
+										"twohanded":<%=weapon.isIsTwohanded()%>,
+										"damage":<%=weapon.getDamage()%>,
+										"damagefire":<%=weapon.getDamageFire()%>,
+										"damageice":<%=weapon.getDamageIce()%>,
+										"damagelightning":<%=weapon.getDamageLightning()%>,
+										"damagepoison":<%=weapon.getDamagePoison()%>,
+										"hp":<%=weapon.getHp()%>,
+										"mana":<%=weapon.getMana()%>,
+										"strength":<%=weapon.getStrength()%>,
+										"agility":<%=weapon.getAgility()%>,
+										"charisma":<%=weapon.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : weapon.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (weapon.getClasses().indexOf(creatureclass)!=weapon.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}
+								else if (item instanceof Armor)
+								{
+									Armor armor = (Armor) item;%>
+									"armor":{
+										"name":"<%=armor.getName()%>",
+										"armor":<%=armor.getArmor()%>,
+										"armortype":<%=armor.getArmorType()%>,
+										"resistfire":<%=armor.getResistFire()%>,
+										"resistice":<%=armor.getResistIce()%>,
+										"resistpoison":<%=armor.getResistPoison()%>,
+										"resistlightning":<%=armor.getResistLightning()%>,
+										"hp":<%=armor.getHp()%>,
+										"mana":<%=armor.getMana()%>,
+										"strength":<%=armor.getStrength()%>,
+										"agility":<%=armor.getAgility()%>,
+										"charisma":<%=armor.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : armor.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (armor.getClasses().indexOf(creatureclass)!=armor.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}	
+								else if (item instanceof Potion)
+								{
+									Potion potion = (Potion) item;%>
+									"potion":{
+										"name":"<%=potion.getName()%>",
+										"addskill":<%=potion.getAddSkill()%>,
+										"skill":"<%=potion.getSkill()%>",
+									}
+								<%}
+								else if (item instanceof Accessory)
+								{
+									Accessory accessory = (Accessory) item;%>
+									"accessory":{
+										"name":"<%=accessory.getName()%>",
+									<%if (accessory.getRoom()!=null)
+									{%>
+										"room":"<%=accessory.getRoom().getName()%>"
+									<%}%>
+									}
+								<%}
+								}%>
+					
+					}
+				<%}%>
+				<%if (!room.getEnemies().isEmpty()) {%>
+				"enemy":[							
+				<%for (Enemy enemy : room.getEnemies()) 
+				{%>
+				{					
+						"agility":<%=enemy.getAgility()%>,
+						"armor":<%=enemy.getArmor()%>,
+						"attacking":<%=enemy.isIsAttacking()%>,
+						"charisma":<%=enemy.getCharisma()%>,
+						"creatureclass":"<%=enemy.getCreatureClass()%>",
+						"damagefire":<%=enemy.getDamageFire()%>,
+						"damageice":<%=enemy.getDamageIce()%>,
+						"damagelightning":<%=enemy.getDamageLightning()%>,
+						"damagepoison":<%=enemy.getDamagePoison()%>,
+						"gold":<%=enemy.getGold()%>,
+						"initplayeractions":<%=enemy.getInitPlayerActions()%>,
+						"inithp":<%=enemy.getInitHp()%>,
+						"initmana":<%=enemy.getInitMana()%>,
+						"level":<%=enemy.getLevel()%>,
+						"male":<%=enemy.isIsMale()%>,
+						"mana":<%=enemy.getMana()%>,
+						"name":"<%=enemy.getName()%>",
+						"race":"<%=enemy.getRace()%>",
+						"resistfire":<%=enemy.getResistFire()%>,
+						"resistice":<%=enemy.getResistIce()%>,
+						"resistlightning":<%=enemy.getResistLightning()%>,
+						"resistpoison":<%=enemy.getResistPoison()%>,
+						"scarefactor":<%=enemy.getScarefactor()%>,
+						"strength":<%=enemy.getStrength()%>,	
+						"boss":<%=enemy.isBoss()%><%if (enemy.isBoss()) {%>,<%}%>
+						<%if (!(enemy.getAuras().isEmpty())) {%>
+						"auras":{					
+						<%for (Aura aura : enemy.getAuras())
+						{%>[
+							"aura":{
+								"auratype":"<%=aura.getAuraType()%>",
+								"ammount":<%=aura.getAmmount()%>
+							}],
+						<%}%>
+						}
+						<%}%>			
+						<%for (Item item : enemy.getInventory()) 
+						{%>
+							"items":{
+							<%if (item instanceof Key)
+									{
+										Key key = (Key) item;%>								
+										"key":{
+											"id":"<%=key.getId()%>",
+											"name":"<%=key.getName()%>"
+										}
+									<%}
+									else if (item instanceof Gold)
+									{
+										Gold gold = (Gold) item;%>
+										"gold":{
+											"name":"<%=gold.getName()%>",
+											"ammount":<%=gold.getAmmount()%>
+										}
+									<%}
+									else if (item instanceof Weapon)
+									{
+										Weapon weapon = (Weapon) item;%>
+										"weapon":{
+											"name":"<%=weapon.getName()%>",
+											"twohanded":<%=weapon.isIsTwohanded()%>,
+											"damage":<%=weapon.getDamage()%>,
+											"damagefire":<%=weapon.getDamageFire()%>,
+											"damageice":<%=weapon.getDamageIce()%>,
+											"damagelightning":<%=weapon.getDamageLightning()%>,
+											"damagepoison":<%=weapon.getDamagePoison()%>,
+											"hp":<%=weapon.getHp()%>,
+											"mana":<%=weapon.getMana()%>,
+											"strength":<%=weapon.getStrength()%>,
+											"agility":<%=weapon.getAgility()%>,
+											"charisma":<%=weapon.getCharisma()%>,
+											"creatureclass":[
+											<%for (ECreatureClass creatureclass : weapon.getClasses())
+											{%>
+												"<%=creatureclass%>"<%if (weapon.getClasses().indexOf(creatureclass)!=weapon.getClasses().size()-1) {%>,<%}%>
+											<%}%>
+											]
+										}
+									<%}
+									else if (item instanceof Armor)
+									{
+										Armor armor = (Armor) item;%>
+										"armor":{
+											"name":"<%=armor.getName()%>",
+											"armor":<%=armor.getArmor()%>,
+											"armortype":<%=armor.getArmorType()%>,
+											"resistfire":<%=armor.getResistFire()%>,
+											"resistice":<%=armor.getResistIce()%>,
+											"resistpoison":<%=armor.getResistPoison()%>,
+											"resistlightning":<%=armor.getResistLightning()%>,
+											"hp":<%=armor.getHp()%>,
+											"mana":<%=armor.getMana()%>,
+											"strength":<%=armor.getStrength()%>,
+											"agility":<%=armor.getAgility()%>,
+											"charisma":<%=armor.getCharisma()%>,
+											"creatureclass":[
+											<%for (ECreatureClass creatureclass : armor.getClasses())
+											{%>
+												"<%=creatureclass%>"<%if (armor.getClasses().indexOf(creatureclass)!=armor.getClasses().size()-1) {%>,<%}%>
+											<%}%>
+											]
+										}
+									<%}	
+									else if (item instanceof Potion)
+									{
+										Potion potion = (Potion) item;%>
+										"potion":{
+											"name":"<%=potion.getName()%>",
+											"addskill":<%=potion.getAddSkill()%>,
+											"skill":"<%=potion.getSkill()%>",
+										}
+									<%}
+									else if (item instanceof Accessory)
+									{
+										Accessory accessory = (Accessory) item;%>
+										"accessory":{
+											"name":"<%=accessory.getName()%>",
+										<%if (accessory.getRoom()!=null)
+										{%>
+											"room":"<%=accessory.getRoom().getName()%>"
+										<%}%>
+										}
+									<%}
+									}%>					
+				}<%if (room.getEnemies().indexOf(enemy)!=room.getEnemies().size()-1) {%>,<%}%>						
+				<%}%>
+				]<%if(!(((EventRoom)room).getEvents().isEmpty())) {%>,<%}%>
+				<%}%>							
+				<%if (room instanceof FinalRoom)
+				{
+					FinalRoom finalroom = (FinalRoom) room;
+				%>				
+					"roomfinal":<%=finalroom.isIsFinal()%>,
+				<%}%>
+				
+				<%if(!(((EventRoom)room).getEvents().isEmpty())) {%>
+				"roomevent":[
+				<%for (RoomEvent roomevent : ((EventRoom)room).getEvents())
+				{%>
+					{
+						"condition":"<%=roomevent.getCondition()%>",
+						"action":"<%=roomevent.getAction()%>",
+						"hp":<%=roomevent.getHP()%>,
+					<%if (roomevent.getNpc()!=null)
+					{%>
+						"npcname":"<%=roomevent.getNpc().getName()%>",
+					<%}%>
+						"enemydead":<%=roomevent.isIsEnemyDead()%>,
+					<% if (roomevent.getHiddenroomfound() != null)
+					{%>
+						"hiddenroomfound":"<%=roomevent.getHiddenroomfound().getName()%>",
+					<%}%>
+						"itemtaken":<%=roomevent.isIsItemtaken()%>,
+						"itemused":<%=roomevent.isIsItemused()%>,
+						"roomdescription":"<%=roomevent.getRoomdescription()%>",
+						"roomenteredtimes":<%=roomevent.getRoomenteredtimes()%>,
+						"trapdescription":"<%=roomevent.getTrapdescription()%>",
+					<%if (roomevent.getNpcGotoId() != 0)
+					{%>
+						"npcgotoid":<%=roomevent.getNpcGotoId()%>,
+					<%}
+					if (roomevent.getRoom() != null)
+					{%>
+						"room":"<%=roomevent.getRoom().getName()%>",
+					<%}%>
+					
+					<%if (roomevent.getEnemyattack() != null)
+					{%>
+						"enemyattack":"<%=roomevent.getEnemyattack().getName()%>"
+					<%}%>
+					<%if ((roomevent.getPlaceenemy() != null) || (roomevent.getItemtaken() != null) || (roomevent.getReceivedItem() != null) || (roomevent.getItemUsed()!= null) || (roomevent.getTrap()!= null) || (roomevent.getQuest()) != null) {%>,<%}%>
+					<%if (roomevent.getPlaceenemy() != null)
+					{
+						Enemy enemy = roomevent.getPlaceenemy();%>
+						"enemy":{
+							"agility":<%=enemy.getAgility()%>,
+							"armor":<%=enemy.getArmor()%>,
+							"attacking":<%=enemy.isIsAttacking()%>,
+							"charisma":<%=enemy.getCharisma()%>,
+							"creatureclass":"<%=enemy.getCreatureClass()%>",
+							"damagefire":<%=enemy.getDamageFire()%>,
+							"damageice":<%=enemy.getDamageIce()%>,
+							"damagelightning":<%=enemy.getDamageLightning()%>,
+							"damagepoison":<%=enemy.getDamagePoison()%>,
+							"gold":<%=enemy.getGold()%>,
+							"initplayeractions":<%=enemy.getInitPlayerActions()%>,
+							"inithp":<%=enemy.getInitHp()%>,
+							"initmana":<%=enemy.getInitMana()%>,
+							"level":<%=enemy.getLevel()%>,
+							"male":<%=enemy.isIsMale()%>,
+							"mana":<%=enemy.getMana()%>,
+							"name":"<%=enemy.getName()%>",
+							"race":"<%=enemy.getRace()%>",
+							"resistfire":<%=enemy.getResistFire()%>,
+							"resistice":<%=enemy.getResistIce()%>,
+							"resistlightning":<%=enemy.getResistLightning()%>,
+							"resistpoison":<%=enemy.getResistPoison()%>,
+							"scarefactor":<%=enemy.getScarefactor()%>,
+							"strength":<%=enemy.getStrength()%>,	
+							"boss":<%=enemy.isBoss()%>,
+							<%if (!(enemy.getAuras().isEmpty())) {%>
+							"auras":{					
+							<%for (Aura aura : enemy.getAuras())
+							{%>[
+								"aura":{
+									"auratype":"<%=aura.getAuraType()%>",
+									"ammount":<%=aura.getAmmount()%>
+								}],
+							<%}
+							}%>			
+						}
+					<%for (Item item : enemy.getInventory()) 
+					{%>
+						"enemyitems":{
+						<%if (item instanceof Key)
+								{
+									Key key = (Key) item;%>								
+									"key":{
+										"id":"<%=key.getId()%>",
+										"name":"<%=key.getName()%>"
+									}
+								<%}
+								else if (item instanceof Gold)
+								{
+									Gold gold = (Gold) item;%>
+									"gold":{
+										"name":"<%=gold.getName()%>",
+										"ammount":<%=gold.getAmmount()%>
+									}
+								<%}
+								else if (item instanceof Weapon)
+								{
+									Weapon weapon = (Weapon) item;%>
+									"weapon":{
+										"name":"<%=weapon.getName()%>",
+										"twohanded":<%=weapon.isIsTwohanded()%>,
+										"damage":<%=weapon.getDamage()%>,
+										"damagefire":<%=weapon.getDamageFire()%>,
+										"damageice":<%=weapon.getDamageIce()%>,
+										"damagelightning":<%=weapon.getDamageLightning()%>,
+										"damagepoison":<%=weapon.getDamagePoison()%>,
+										"hp":<%=weapon.getHp()%>,
+										"mana":<%=weapon.getMana()%>,
+										"strength":<%=weapon.getStrength()%>,
+										"agility":<%=weapon.getAgility()%>,
+										"charisma":<%=weapon.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : weapon.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (weapon.getClasses().indexOf(creatureclass)!=weapon.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}
+								else if (item instanceof Armor)
+								{
+									Armor armor = (Armor) item;%>
+									"armor":{
+										"name":"<%=armor.getName()%>",
+										"armor":<%=armor.getArmor()%>,
+										"armortype":<%=armor.getArmorType()%>,
+										"resistfire":<%=armor.getResistFire()%>,
+										"resistice":<%=armor.getResistIce()%>,
+										"resistpoison":<%=armor.getResistPoison()%>,
+										"resistlightning":<%=armor.getResistLightning()%>,
+										"hp":<%=armor.getHp()%>,
+										"mana":<%=armor.getMana()%>,
+										"strength":<%=armor.getStrength()%>,
+										"agility":<%=armor.getAgility()%>,
+										"charisma":<%=armor.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : armor.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (armor.getClasses().indexOf(creatureclass)!=armor.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}	
+								else if (item instanceof Potion)
+								{
+									Potion potion = (Potion) item;%>
+									"potion":{
+										"name":"<%=potion.getName()%>",
+										"addskill":<%=potion.getAddSkill()%>,
+										"skill":"<%=potion.getSkill()%>",
+									}
+								<%}
+								else if (item instanceof Accessory)
+								{
+									Accessory accessory = (Accessory) item;%>
+									"accessory":{
+										"name":"<%=accessory.getName()%>",
+									<%if (accessory.getRoom()!=null)
+									{%>
+										"room":"<%=accessory.getRoom().getName()%>"
+									<%}%>
+								<%}
+								}%>					
+						},
+					<%}%>											
+					<%if (roomevent.getItemtaken() != null)
+					{
+						Item item = roomevent.getItemtaken();%>
+						"roomeventitemtaken":{
+								<%if (item instanceof Key)
+								{
+									Key key = (Key) item;%>								
+									"key":{
+										"id":"<%=key.getId()%>",
+										"name":"<%=key.getName()%>"
+									}
+								<%}
+								else if (item instanceof Gold)
+								{
+									Gold gold = (Gold) item;%>
+									"gold":{
+										"name":"<%=gold.getName()%>",
+										"ammount":<%=gold.getAmmount()%>
+									}
+								<%}
+								else if (item instanceof Weapon)
+								{
+									Weapon weapon = (Weapon) item;%>
+									"weapon":{
+										"name":"<%=weapon.getName()%>",
+										"twohanded":<%=weapon.isIsTwohanded()%>,
+										"damage":<%=weapon.getDamage()%>,
+										"damagefire":<%=weapon.getDamageFire()%>,
+										"damageice":<%=weapon.getDamageIce()%>,
+										"damagelightning":<%=weapon.getDamageLightning()%>,
+										"damagepoison":<%=weapon.getDamagePoison()%>,
+										"hp":<%=weapon.getHp()%>,
+										"mana":<%=weapon.getMana()%>,
+										"strength":<%=weapon.getStrength()%>,
+										"agility":<%=weapon.getAgility()%>,
+										"charisma":<%=weapon.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : weapon.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (weapon.getClasses().indexOf(creatureclass)!=weapon.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}
+								else if (item instanceof Armor)
+								{
+									Armor armor = (Armor) item;%>
+									"armor":{
+										"name":"<%=armor.getName()%>",
+										"armor":<%=armor.getArmor()%>,
+										"armortype":<%=armor.getArmorType()%>,
+										"resistfire":<%=armor.getResistFire()%>,
+										"resistice":<%=armor.getResistIce()%>,
+										"resistpoison":<%=armor.getResistPoison()%>,
+										"resistlightning":<%=armor.getResistLightning()%>,
+										"hp":<%=armor.getHp()%>,
+										"mana":<%=armor.getMana()%>,
+										"strength":<%=armor.getStrength()%>,
+										"agility":<%=armor.getAgility()%>,
+										"charisma":<%=armor.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : armor.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (armor.getClasses().indexOf(creatureclass)!=armor.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}	
+								else if (item instanceof Potion)
+								{
+									Potion potion = (Potion) item;%>
+									"potion":{
+										"name":"<%=potion.getName()%>",
+										"addskill":<%=potion.getAddSkill()%>,
+										"skill":"<%=potion.getSkill()%>"
+									}
+								<%}
+								else if (item instanceof Accessory)
+								{
+									Accessory accessory = (Accessory) item;%>
+									"accessory":{
+										"name":"<%=accessory.getName()%>",
+									<%if (accessory.getRoom()!=null)
+									{%>
+										"room":"<%=accessory.getRoom().getName()%>"
+									<%}%>
+									}
+								<%}%>
+						}
+						<%}%>
+					
+					
+					
+					<%if (roomevent.getReceivedItem() != null)
+					{%>
+					<%Item item = roomevent.getReceivedItem();%>
+					"receiveditems":{
+						<%if (item instanceof Key)
+								{
+									Key key = (Key) item;%>								
+									"key":{
+										"id":"<%=key.getId()%>",
+										"name":"<%=key.getName()%>"
+									}
+								<%}
+								else if (item instanceof Gold)
+								{
+									Gold gold = (Gold) item;%>
+									"gold":{
+										"name":"<%=gold.getName()%>",
+										"ammount":<%=gold.getAmmount()%>
+									}
+								<%}
+								else if (item instanceof Weapon)
+								{
+									Weapon weapon = (Weapon) item;%>
+									"weapon":{
+										"name":"<%=weapon.getName()%>",
+										"twohanded":<%=weapon.isIsTwohanded()%>,
+										"damage":<%=weapon.getDamage()%>,
+										"damagefire":<%=weapon.getDamageFire()%>,
+										"damageice":<%=weapon.getDamageIce()%>,
+										"damagelightning":<%=weapon.getDamageLightning()%>,
+										"damagepoison":<%=weapon.getDamagePoison()%>,
+										"hp":<%=weapon.getHp()%>,
+										"mana":<%=weapon.getMana()%>,
+										"strength":<%=weapon.getStrength()%>,
+										"agility":<%=weapon.getAgility()%>,
+										"charisma":<%=weapon.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : weapon.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (weapon.getClasses().indexOf(creatureclass)!=weapon.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}
+								else if (item instanceof Armor)
+								{
+									Armor armor = (Armor) item;%>
+									"armor":{
+										"name":"<%=armor.getName()%>",
+										"armor":<%=armor.getArmor()%>,
+										"armortype":<%=armor.getArmorType()%>,
+										"resistfire":<%=armor.getResistFire()%>,
+										"resistice":<%=armor.getResistIce()%>,
+										"resistpoison":<%=armor.getResistPoison()%>,
+										"resistlightning":<%=armor.getResistLightning()%>,
+										"hp":<%=armor.getHp()%>,
+										"mana":<%=armor.getMana()%>,
+										"strength":<%=armor.getStrength()%>,
+										"agility":<%=armor.getAgility()%>,
+										"charisma":<%=armor.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : armor.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (armor.getClasses().indexOf(creatureclass)!=armor.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}	
+								else if (item instanceof Potion)
+								{
+									Potion potion = (Potion) item;%>
+									"potion":{
+										"name":"<%=potion.getName()%>",
+										"addskill":<%=potion.getAddSkill()%>,
+										"skill":"<%=potion.getSkill()%>",
+									}
+								<%}
+								else if (item instanceof Accessory)
+								{
+									Accessory accessory = (Accessory) item;%>
+									"accessory":{
+										"name":"<%=accessory.getName()%>",
+									<%if (accessory.getRoom()!=null)
+									{%>
+										"room":"<%=accessory.getRoom().getName()%>"
+									<%}%>
+									}
+								<%}%>
+							}
+							<%}%>					
+									
+					<%if (roomevent.getItemUsed() != null)
+					{
+					Item item = roomevent.getItemUsed();%>
+						"itemsused":{
+						<%if (item instanceof Key)
+								{
+									Key key = (Key) item;%>								
+									"key":{
+										"id":"<%=key.getId()%>",
+										"name":"<%=key.getName()%>"
+									}
+								<%}
+								else if (item instanceof Gold)
+								{
+									Gold gold = (Gold) item;%>
+									"gold":{
+										"name":"<%=gold.getName()%>",
+										"ammount":<%=gold.getAmmount()%>
+									}
+								<%}
+								else if (item instanceof Weapon)
+								{
+									Weapon weapon = (Weapon) item;%>
+									"weapon":{
+										"name":"<%=weapon.getName()%>",
+										"twohanded":<%=weapon.isIsTwohanded()%>,
+										"damage":<%=weapon.getDamage()%>,
+										"damagefire":<%=weapon.getDamageFire()%>,
+										"damageice":<%=weapon.getDamageIce()%>,
+										"damagelightning":<%=weapon.getDamageLightning()%>,
+										"damagepoison":<%=weapon.getDamagePoison()%>,
+										"hp":<%=weapon.getHp()%>,
+										"mana":<%=weapon.getMana()%>,
+										"strength":<%=weapon.getStrength()%>,
+										"agility":<%=weapon.getAgility()%>,
+										"charisma":<%=weapon.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : weapon.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (weapon.getClasses().indexOf(creatureclass)!=weapon.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}
+								else if (item instanceof Armor)
+								{
+									Armor armor = (Armor) item;%>
+									"armor":{
+										"name":"<%=armor.getName()%>",
+										"armor":<%=armor.getArmor()%>,
+										"armortype":<%=armor.getArmorType()%>,
+										"resistfire":<%=armor.getResistFire()%>,
+										"resistice":<%=armor.getResistIce()%>,
+										"resistpoison":<%=armor.getResistPoison()%>,
+										"resistlightning":<%=armor.getResistLightning()%>,
+										"hp":<%=armor.getHp()%>,
+										"mana":<%=armor.getMana()%>,
+										"strength":<%=armor.getStrength()%>,
+										"agility":<%=armor.getAgility()%>,
+										"charisma":<%=armor.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : armor.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (armor.getClasses().indexOf(creatureclass)!=armor.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}	
+								else if (item instanceof Potion)
+								{
+									Potion potion = (Potion) item;%>
+									"potion":{
+										"name":"<%=potion.getName()%>",
+										"addskill":<%=potion.getAddSkill()%>,
+										"skill":"<%=potion.getSkill()%>",
+									}
+								<%}
+								else if (item instanceof Accessory)
+								{
+									Accessory accessory = (Accessory) item;%>
+									"accessory":{
+										"name":"<%=accessory.getName()%>",
+									<%if (accessory.getRoom()!=null)
+									{%>
+										"room":"<%=accessory.getRoom().getName()%>"
+									<%}%>
+									}
+								<%}%>
+						}
+						<%}%>
+		
+					<%if (roomevent.getTrap() != null)
+					{
+						Trap trap = roomevent.getTrap();%>
+					"trap":{
+						"fire":<%=trap.getFire()%>,
+						"lightning":<%=trap.getLightning()%>,
+						"ice":<%=trap.getIce()%>,
+						"poison":<%=trap.getPoison()%>,
+						"normal":<%=trap.getNormal()%>,
+						"agility":<%=trap.getTrapagility()%>,
+						"description":"<%=trap.getTrapdescription()%>",
+						"type":"<%=trap.getType()%>
+					}
+					<%}%>
+					<%if (roomevent.getQuest() != null)
+					{%>
+					"quest":{
+						"id":<%=roomevent.getQuest().getId()%>,
+						"introduction":"<%=roomevent.getQuest().getIntroduction()%>",
+						"description":"<%=roomevent.getQuest().getDescription()%>",
+						"completetext":"<%=roomevent.getQuest().getCompleteText()%>",
+						"xpearned":<%=roomevent.getQuest().getXpEarned()%>,
+						"questcondition":"<%=roomevent.getQuest().getQuestCondition()%>",
+						<%if (roomevent.getQuest().getNpcGivenby() != null)
+						{%>
+						"npcgivenby":"<%=roomevent.getQuest().getNpcGivenby().getName()%>",
+						<%}%>
+						<%if (roomevent.getQuest().getEnemydead() != null)
+						{%>
+						"enemydead":"<%=roomevent.getQuest().getEnemydead().getName()%>",
+						<%}%>
+						"dialogid":<%=roomevent.getQuest().getDialogid()%>,
+							
+						//Set item on quest
+						<%if (roomevent.getQuest().getQuestItem() != null)
+						{%>
+						"questitem":"<%=roomevent.getQuest().getQuestItem().getName()%>",
+						<%}%>
+							
+						//Set award item on quest
+						<%if (roomevent.getQuest().getAwardItem() != null)
+						{
+							Item item = roomevent.getQuest().getAwardItem();%>
+						"items":{
+						<%if (item instanceof Key)
+								{
+									Key key = (Key) item;%>								
+									"key":{
+										"id":"<%=key.getId()%>",
+										"name":"<%=key.getName()%>"
+									}
+								<%}
+								else if (item instanceof Gold)
+								{
+									Gold gold = (Gold) item;%>
+									"gold":{
+										"name":"<%=gold.getName()%>",
+										"ammount":<%=gold.getAmmount()%>
+									}
+								<%}
+								else if (item instanceof Weapon)
+								{
+									Weapon weapon = (Weapon) item;%>
+									"weapon":{
+										"name":"<%=weapon.getName()%>",
+										"twohanded":<%=weapon.isIsTwohanded()%>,
+										"damage":<%=weapon.getDamage()%>,
+										"damagefire":<%=weapon.getDamageFire()%>,
+										"damageice":<%=weapon.getDamageIce()%>,
+										"damagelightning":<%=weapon.getDamageLightning()%>,
+										"damagepoison":<%=weapon.getDamagePoison()%>,
+										"hp":<%=weapon.getHp()%>,
+										"mana":<%=weapon.getMana()%>,
+										"strength":<%=weapon.getStrength()%>,
+										"agility":<%=weapon.getAgility()%>,
+										"charisma":<%=weapon.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : weapon.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (weapon.getClasses().indexOf(creatureclass)!=weapon.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}
+								else if (item instanceof Armor)
+								{
+									Armor armor = (Armor) item;%>
+									"armor":{
+										"name":"<%=armor.getName()%>",
+										"armor":<%=armor.getArmor()%>,
+										"armortype":<%=armor.getArmorType()%>,
+										"resistfire":<%=armor.getResistFire()%>,
+										"resistice":<%=armor.getResistIce()%>,
+										"resistpoison":<%=armor.getResistPoison()%>,
+										"resistlightning":<%=armor.getResistLightning()%>,
+										"hp":<%=armor.getHp()%>,
+										"mana":<%=armor.getMana()%>,
+										"strength":<%=armor.getStrength()%>,
+										"agility":<%=armor.getAgility()%>,
+										"charisma":<%=armor.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : armor.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (armor.getClasses().indexOf(creatureclass)!=armor.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}	
+								else if (item instanceof Potion)
+								{
+									Potion potion = (Potion) item;%>
+									"potion":{
+										"name":"<%=potion.getName()%>",
+										"addskill":<%=potion.getAddSkill()%>,
+										"skill":"<%=potion.getSkill()%>",
+									}
+								<%}
+								else if (item instanceof Accessory)
+								{
+									Accessory accessory = (Accessory) item;%>
+									"accessory":{
+										"name":"<%=accessory.getName()%>",
+									<%if (accessory.getRoom()!=null)
+									{%>
+										"room":"<%=accessory.getRoom().getName()%>"
+									<%}%>
+									}
+								<%}%>
+							}
+							<%}%>
+					
+						<%if (roomevent.getQuest().getRoom()!=null)
+						{%>
+						"room":"<%=roomevent.getQuest().getRoom().getName()%>"
+						<%}%>
+							}
+					<%}%>
+				}<%if (((EventRoom)room).getEvents().indexOf(roomevent)==((EventRoom)room).getEvents().size()-1) {%>]<%}%>
+				<%}%>
+				<%if (((EventRoom)room).getQuest() != null)
+				{%>
+					//Set Quest when entering room
+					questtmp = new Quest();
+					questtmp.setId(<%=((EventRoom)room).getQuest().getId()%>);
+					questtmp.setIntroduction("<%=((EventRoom)room).getQuest().getIntroduction()%>");
+					questtmp.setDescription("<%=((EventRoom)room).getQuest().getDescription()%>");
+					questtmp.setCompleteText("<%=((EventRoom)room).getQuest().getCompleteText()%>");
+					questtmp.setXpEarned(<%=((EventRoom)room).getQuest().getXpEarned()%>);
+					questtmp.setQuestCondition(ERoomEventCondition.<%=((EventRoom)room).getQuest().getQuestCondition()%>);
+				<%if (((EventRoom)room).getQuest().getNpcGivenby() != null)
+				{%>
+					questtmp.setNpcGivenby("<%=((EventRoom)room).getQuest().getNpcGivenby().getName()%>");
+				<%}%>
+				<%if (((EventRoom)room).getQuest().getEnemydead() != null)
+				{%>
+					questtmp.setEnemydead("<%=((EventRoom)room).getQuest().getEnemydead().getName()%>");
+				<%}%>
+					questtmp.setDialogid(<%=((EventRoom)room).getQuest().getDialogid()%>);
+					
+					//Set item on quest
+					<%if (((EventRoom)room).getQuest().getQuestItem() != null)
+					{%>
+						questtmp.setQuestItem("<%=((EventRoom)room).getQuest().getQuestItem().getName()%>");
+					<%}%>
+					
+					//Set award item on quest
+					<%if (((EventRoom)room).getQuest().getAwardItem() != null)
+					{
+					Item item = ((EventRoom)room).getQuest().getAwardItem();%>
+					"items":{
+						<%if (item instanceof Key)
+								{
+									Key key = (Key) item;%>								
+									"key":{
+										"id":"<%=key.getId()%>",
+										"name":"<%=key.getName()%>"
+									}
+								<%}
+								else if (item instanceof Gold)
+								{
+									Gold gold = (Gold) item;%>
+									"gold":{
+										"name":"<%=gold.getName()%>",
+										"ammount":<%=gold.getAmmount()%>
+									}
+								<%}
+								else if (item instanceof Weapon)
+								{
+									Weapon weapon = (Weapon) item;%>
+									"weapon":{
+										"name":"<%=weapon.getName()%>",
+										"twohanded":<%=weapon.isIsTwohanded()%>,
+										"damage":<%=weapon.getDamage()%>,
+										"damagefire":<%=weapon.getDamageFire()%>,
+										"damageice":<%=weapon.getDamageIce()%>,
+										"damagelightning":<%=weapon.getDamageLightning()%>,
+										"damagepoison":<%=weapon.getDamagePoison()%>,
+										"hp":<%=weapon.getHp()%>,
+										"mana":<%=weapon.getMana()%>,
+										"strength":<%=weapon.getStrength()%>,
+										"agility":<%=weapon.getAgility()%>,
+										"charisma":<%=weapon.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : weapon.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (weapon.getClasses().indexOf(creatureclass)!=weapon.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}
+								else if (item instanceof Armor)
+								{
+									Armor armor = (Armor) item;%>
+									"armor":{
+										"name":"<%=armor.getName()%>",
+										"armor":<%=armor.getArmor()%>,
+										"armortype":<%=armor.getArmorType()%>,
+										"resistfire":<%=armor.getResistFire()%>,
+										"resistice":<%=armor.getResistIce()%>,
+										"resistpoison":<%=armor.getResistPoison()%>,
+										"resistlightning":<%=armor.getResistLightning()%>,
+										"hp":<%=armor.getHp()%>,
+										"mana":<%=armor.getMana()%>,
+										"strength":<%=armor.getStrength()%>,
+										"agility":<%=armor.getAgility()%>,
+										"charisma":<%=armor.getCharisma()%>,
+										"creatureclass":[
+										<%for (ECreatureClass creatureclass : armor.getClasses())
+										{%>
+											"<%=creatureclass%>"<%if (armor.getClasses().indexOf(creatureclass)!=armor.getClasses().size()-1) {%>,<%}%>
+										<%}%>
+										]
+									}
+								<%}	
+								else if (item instanceof Potion)
+								{
+									Potion potion = (Potion) item;%>
+									"potion":{
+										"name":"<%=potion.getName()%>",
+										"addskill":<%=potion.getAddSkill()%>,
+										"skill":"<%=potion.getSkill()%>",
+									}
+								<%}
+								else if (item instanceof Accessory)
+								{
+									Accessory accessory = (Accessory) item;%>
+									"accessory":{
+										"name":"<%=accessory.getName()%>",
+									<%if (accessory.getRoom()!=null)
+									{%>
+										"room":"<%=accessory.getRoom().getName()%>"
+									<%}%>
+									}
+								<%}
+								}%>
+					
+					},	
+					<%if (((EventRoom)room).getQuest().getRoom()!=null)
+					{%>						
+						"room":"<%=((EventRoom)room).getQuest().getRoom().getName()%>"
+					<%}%>
+					}
+				<%}%>
+			<%}%>
+			},
+			<%}%>
+		]}
+	}
+}

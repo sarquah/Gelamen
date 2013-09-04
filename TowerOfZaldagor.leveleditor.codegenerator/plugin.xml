@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="TowerOfZaldagor.leveleditor.codegenerator.objectContribution1"
+            objectClass="Leveleditor.Act">
+         <action
+               class="towerofzaldagor.leveleditor.codegenerator.GenerateJavaCode"
+               enablesFor="1"
+               id="TowerOfZaldagor.leveleditor.codegenerator.action1"
+               label="Generate Java code">
+         </action>
+         <action
+               class="towerofzaldagor.leveleditor.codegenerator.GenerateJSONCode"
+               enablesFor="1"
+               id="TowerOfZaldagor.leveleditor.codegenerator.action2"
+               label="Generate JSON">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>

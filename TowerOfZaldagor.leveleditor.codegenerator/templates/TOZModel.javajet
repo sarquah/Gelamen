@@ -1,0 +1,1428 @@
+<%@ jet package="templates" imports="Leveleditor.*" class="TOZModel"%>
+<% 
+	Act act = (Act) argument;
+%>
+package acts;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import leveleditor.actors.*;
+import leveleditor.items.*;
+import leveleditor.room.*;
+import battle.*;
+import dialog.*;
+import engine.Engine;
+/**
+ * 
+ * @author Stephen Sarquah
+ * @info Modified for Android
+ * @generated TowerOfZaldagor.leveleditor.codegenerator
+ * @copyright
+ * Copyright 2012 Stephen Sarquah
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+public class <%= act.getActName() %> implements Act, Serializable
+{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private EventRoom roomtmp;
+	private String firstroom;
+	private Potion potiontmp;
+	private Key keytmp;
+	private Armor armortmp;
+	private Weapon weapontmp;
+	private Gold goldtmp;
+	private Enemy enemytmp;
+	private NPC npctmp;
+	private DialogController dialogContmp;
+	private DialogChoices dialogChoicestmp;
+	private Dialog dialogtmp;
+	private DialogSkillTest dialogSkillTesttmp;
+	private RoomEvent roomeventtmp;
+	private Trap traptmp;
+	private String actName;
+	private Act gotoAct;
+	private String description;
+	private Quest questtmp;
+	private Accessory accessorytmp;
+	private Aura auratmp;
+	
+	public <%= act.getActName() %>()
+	{
+		actName="<%= act.getActName() %>";
+		description="<%=act.getDescription()%>";
+		<%if (act.getGotoAct() != null)
+		{%>
+			<%= act.getGotoAct().getActName()%> nextact = new <%= act.getGotoAct().getActName()%>();
+			gotoAct=nextact;
+		<%}%>
+	}
+	
+	public void createWorld()
+	{
+		HashMap<String, Room> world = new HashMap<String, Room>();
+		
+		firstroom="<%=act.getWorld().get(0).getName()%>";
+		<%for (Room room : act.getWorld()) 
+		{%>
+			//Create room
+			<%if (room instanceof FinalRoom)
+			{%>
+				roomtmp = new FinalRoom();
+			<%}
+			else
+			{%>
+				roomtmp = new EventRoom();
+			<%}%>
+			roomtmp.setName("<%=room.getName()%>");
+			roomtmp.setDescription("<%=room.getDescription()%>");
+			roomtmp.setHidden(<%=room.isIsHidden()%>);
+			roomtmp.setHiddenEvent(<%=room.isIsHiddenEvent()%>);
+			roomtmp.setAutosave(<%=room.isAutosave()%>);
+			roomtmp.setLocked(<%=room.isIsLocked()%>);
+			roomtmp.setRevealed(<%=room.isIsRevealed()%>);
+			<%if ((room.getPostDescription()!=null) && (room.getPostDescription()!=""))
+			{%>
+				roomtmp.setPostDescription("<%=room.getPostDescription()%>");
+			<%}%>
+			<%if ((room.getPostItemsDescription()!=null) && (room.getPostItemsDescription()!=""))
+			{%>
+				roomtmp.setPostItemsDescription("<%=room.getPostItemsDescription()%>");
+			<%}%>
+			<%if ((room.getRevealedDescription()!=null) && (room.getRevealedDescription()!=""))
+			{%>
+				roomtmp.setRevealedDescription("<%=room.getRevealedDescription()%>");
+			<%}%>
+			<%if ((room.getHiddenDescription()!=null) && (room.getHiddenDescription()!=""))
+			{%>
+				roomtmp.setHiddenDescription("<%=room.getHiddenDescription()%>");
+			<%}%>
+			
+			//Connect rooms
+			<%if (room.getEast()!=null)
+			{%>
+				roomtmp.setEast("<%=room.getEast().getName()%>");
+			<%}%>
+			<%if (room.getWest()!=null)
+			{%>
+				roomtmp.setWest("<%=room.getWest().getName()%>");
+			<%}%>
+			<%if (room.getSouth()!=null)
+			{%>
+				roomtmp.setSouth("<%=room.getSouth().getName()%>");
+			<%}%>
+			<%if (room.getNorth()!=null)
+			{%>
+				roomtmp.setNorth("<%=room.getNorth().getName()%>");
+			<%}%>
+						
+			<%for (Item item : room.getItems()) 
+			{%>
+				//Set items in room
+				<%if (item instanceof Key)
+				{
+					Key key = (Key) item;%>
+					keytmp = new Key();
+					keytmp.setId("<%=key.getId()%>");
+					keytmp.setName("<%=key.getName()%>");
+					roomtmp.getItems().add(keytmp);
+				<%}
+				else if (item instanceof Gold)
+				{
+					Gold gold = (Gold) item;%>
+					goldtmp = new Gold();
+					goldtmp.setName("<%=gold.getName()%>");
+					goldtmp.setAmmount(<%=gold.getAmmount()%>);
+					roomtmp.getItems().add(goldtmp);
+				<%}
+				else if (item instanceof Weapon)
+				{
+					Weapon weapon = (Weapon) item;%>
+					weapontmp = new Weapon();
+					weapontmp.setName("<%=weapon.getName()%>");
+					weapontmp.setTwohanded(<%=weapon.isIsTwohanded()%>);
+					weapontmp.setDamage(<%=weapon.getDamage()%>);
+					weapontmp.setDamageFire(<%=weapon.getDamageFire()%>);
+					weapontmp.setDamageIce(<%=weapon.getDamageIce()%>);
+					weapontmp.setDamageLightning(<%=weapon.getDamageLightning()%>);
+					weapontmp.setDamagePoison(<%=weapon.getDamagePoison()%>);
+					weapontmp.setHp(<%=weapon.getHp()%>);
+					weapontmp.setMana(<%=weapon.getMana()%>);
+					weapontmp.setStrength(<%=weapon.getStrength()%>);
+					weapontmp.setAgility(<%=weapon.getAgility()%>);
+					weapontmp.setCharisma(<%=weapon.getCharisma()%>);
+					
+					<%for (ECreatureClass creatureclass : weapon.getClasses())
+					{%>
+					weapontmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+					<%}%>
+					roomtmp.getItems().add(weapontmp);
+				<%}
+				else if (item instanceof Armor)
+				{
+					Armor armor = (Armor) item;%>
+					armortmp = new Armor();
+					armortmp.setName("<%=armor.getName()%>");
+					armortmp.setArmor(<%=armor.getArmor()%>);
+					armortmp.setArmorType(EArmorType.<%=armor.getArmorType()%>);
+					armortmp.setResistFire(<%=armor.getResistFire()%>);
+					armortmp.setResistIce(<%=armor.getResistIce()%>);
+					armortmp.setResistPoison(<%=armor.getResistPoison()%>);
+					armortmp.setResistLightning(<%=armor.getResistLightning()%>);
+					armortmp.setHp(<%=armor.getHp()%>);
+					armortmp.setMana(<%=armor.getMana()%>);
+					armortmp.setStrength(<%=armor.getStrength()%>);
+					armortmp.setAgility(<%=armor.getAgility()%>);
+					armortmp.setCharisma(<%=armor.getCharisma()%>);
+					roomtmp.getItems().add(armortmp);
+					<%for (ECreatureClass creatureclass : armor.getClasses())
+					{%>
+						armortmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+					<%}%>
+				<%}
+				else if (item instanceof Potion)
+				{
+					Potion potion = (Potion) item;%>
+					potiontmp = new Potion();
+					potiontmp.setName("<%=potion.getName()%>");
+					potiontmp.setAddSkill(<%=potion.getAddSkill()%>);
+					potiontmp.setSkill(ESkill.<%=potion.getSkill()%>);
+					roomtmp.getItems().add(potiontmp);
+				<%}
+				else if (item instanceof Accessory)
+				{
+					Accessory accessory = (Accessory) item;%>
+					accessorytmp = new Accessory();
+					accessorytmp.setName("<%=accessory.getName()%>");
+					<%if (accessory.getRoom()!=null)
+					{%>
+						accessorytmp.setRoom("<%=accessory.getRoom().getName()%>");
+					<%}%>
+					roomtmp.getItems().add(accessorytmp);
+				<%}
+			}%>
+						
+			<%for (Key unlockkey : room.getUnlockKeys()) 
+			{%>
+				//Set unlock keys
+				keytmp = new Key();
+				keytmp.setId("<%=unlockkey.getId()%>");
+				keytmp.setName("<%=unlockkey.getName()%>");
+				roomtmp.getUnlockKeys().add(keytmp);
+			<%}%>
+						
+			<%for (NPC npc : room.getNpcs()) 
+			{%>
+				//Set NPCs
+				npctmp = new NPC();
+				npctmp.setName("<%=npc.getName()%>");
+				npctmp.setTalking(<%=npc.isTalking()%>);
+				npctmp.setFirsttime(<%=npc.isFirsttime()%>);
+				npctmp.setGotoId(<%=npc.getGotoId()%>);
+				npctmp.setAgility(<%=npc.getAgility()%>);
+				npctmp.setArmor(<%=npc.getArmor()%>);
+				npctmp.setCreatureClass(ECreatureClass.<%=npc.getCreatureClass()%>);				
+				npctmp.setGold(<%=npc.getGold()%>);
+				npctmp.setInitPlayerActions(<%=npc.getInitPlayerActions()%>);
+				npctmp.setInitHp(<%=npc.getInitHp()%>);
+				npctmp.setInitMana(<%=npc.getInitMana()%>);
+				npctmp.setLevel(<%=npc.getLevel()%>);
+				npctmp.setMale(<%=npc.isIsMale()%>);
+				npctmp.setMana(<%=npc.getMana()%>);
+				npctmp.setRace(ECreatureRace.<%=npc.getRace()%>);
+				npctmp.setResistFire(<%=npc.getResistFire()%>);
+				npctmp.setResistIce(<%=npc.getResistIce()%>);
+				npctmp.setResistLightning(<%=npc.getResistLightning()%>);
+				npctmp.setResistPoison(<%=npc.getResistPoison()%>);
+				npctmp.setStrength(<%=npc.getStrength()%>);
+				npctmp.setAttacking(<%=npc.isIsAttacking()%>);
+				npctmp.setScarefactor(<%=npc.getScarefactor()%>);
+				npctmp.setDamageFire(<%=npc.getDamageFire()%>);
+				npctmp.setDamageLightning(<%=npc.getDamageLightning()%>);
+				npctmp.setDamageIce(<%=npc.getDamageIce()%>);
+				npctmp.setDamagePoison(<%=npc.getDamagePoison()%>);
+				npctmp.setBoss(<%=npc.isBoss()%>);
+				<%for (Aura aura : npc.getAuras())
+				{%>
+					auratmp = new Aura();
+					auratmp.setAuraType(EAura.<%=aura.getAuraType()%>);
+					auratmp.setAmmount(<%=aura.getAmmount()%>);
+					npctmp.getAuras().add(auratmp);
+				<%}%>
+				dialogContmp = new DialogController();
+				<%for (DialogChoices dialogChoices : npc.getDialogcontroller().getConversation()) 
+				{%>
+					//Set dialogs
+					dialogChoicestmp = new DialogChoices();
+					dialogChoicestmp.setId(<%=dialogChoices.getId()%>);
+					<%for (Dialog dialog : dialogChoices.getChoices()) 
+					{%>						
+						dialogtmp = new Dialog();
+						dialogtmp.setId(<%=dialog.getId()%>);
+						dialogtmp.setOptiontext("<%=dialog.getOptiontext()%>");
+						dialogtmp.setAnswertext("<%=dialog.getAnswertext()%>");
+						dialogtmp.setGotoId(<%=dialog.getGotoId()%>);
+						dialogtmp.setAttacking(<%=dialog.isIsAttacking()%>);
+						dialogtmp.setEvent(<%=dialog.isEvent()%>);
+						<%if (dialog.getQuest() != null)
+						{%>							
+							//Set Quest on dialog
+							questtmp = new Quest();
+							questtmp.setId(<%=dialog.getQuest().getId()%>);
+							questtmp.setIntroduction("<%=dialog.getQuest().getIntroduction()%>");
+							questtmp.setDescription("<%=dialog.getQuest().getDescription()%>");
+							questtmp.setCompleteText("<%=dialog.getQuest().getCompleteText()%>");
+							questtmp.setXpEarned(<%=dialog.getQuest().getXpEarned()%>);
+							questtmp.setQuestCondition(ERoomEventCondition.<%=dialog.getQuest().getQuestCondition()%>);
+							<%if (dialog.getQuest().getNpcGivenby() != null)
+							{%>
+								questtmp.setNpcGivenby("<%=dialog.getQuest().getNpcGivenby().getName()%>");
+							<%}%>
+							<%if (dialog.getQuest().getEnemydead() != null)
+							{%>
+								questtmp.setEnemydead("<%=dialog.getQuest().getEnemydead().getName()%>");
+							<%}%>
+							questtmp.setDialogid(<%=dialog.getQuest().getDialogid()%>);
+							
+							//Set item on Quest
+							<%if (dialog.getQuest().getQuestItem() != null)
+							{%>
+								questtmp.setQuestItem("<%=dialog.getQuest().getQuestItem().getName()%>");
+							<%}%>							
+							<%if (dialog.getQuest().getAwardItem() != null)
+							{
+								Item item = dialog.getQuest().getAwardItem();
+								if (item instanceof Key)
+								{
+									Key key = (Key) item;%>
+									keytmp = new Key();
+									keytmp.setId("<%=key.getId()%>");
+									keytmp.setName("<%=key.getName()%>");
+									questtmp.setAwardItem(keytmp);
+								<%}
+								else if (item instanceof Gold)
+								{
+									Gold gold = (Gold) item;%>
+									goldtmp = new Gold();
+									goldtmp.setName("<%=gold.getName()%>");
+									goldtmp.setAmmount(<%=gold.getAmmount()%>);
+									questtmp.setAwardItem(goldtmp);
+								<%}
+								else if (item instanceof Weapon)
+								{
+									Weapon weapon = (Weapon) item;%>
+									weapontmp = new Weapon();
+									weapontmp.setName("<%=weapon.getName()%>");
+									weapontmp.setTwohanded(<%=weapon.isIsTwohanded()%>);
+									weapontmp.setDamage(<%=weapon.getDamage()%>);
+									weapontmp.setDamageFire(<%=weapon.getDamageFire()%>);
+									weapontmp.setDamageIce(<%=weapon.getDamageIce()%>);
+									weapontmp.setDamageLightning(<%=weapon.getDamageLightning()%>);
+									weapontmp.setDamagePoison(<%=weapon.getDamagePoison()%>);
+									weapontmp.setHp(<%=weapon.getHp()%>);
+									weapontmp.setMana(<%=weapon.getMana()%>);
+									weapontmp.setStrength(<%=weapon.getStrength()%>);
+									weapontmp.setAgility(<%=weapon.getAgility()%>);
+									weapontmp.setCharisma(<%=weapon.getCharisma()%>);
+									<%for (ECreatureClass creatureclass : weapon.getClasses())
+									{%>
+										weapontmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+									<%}%>
+									questtmp.setAwardItem(weapontmp);
+								<%}
+								else if (item instanceof Armor)
+								{
+									Armor armor = (Armor) item;%>
+									armortmp = new Armor();
+									armortmp.setName("<%=armor.getName()%>");
+									armortmp.setArmor(<%=armor.getArmor()%>);
+									armortmp.setArmorType(EArmorType.<%=armor.getArmorType()%>);
+									armortmp.setResistFire(<%=armor.getResistFire()%>);
+									armortmp.setResistIce(<%=armor.getResistIce()%>);
+									armortmp.setResistPoison(<%=armor.getResistPoison()%>);
+									armortmp.setResistLightning(<%=armor.getResistLightning()%>);
+									armortmp.setHp(<%=armor.getHp()%>);
+									armortmp.setMana(<%=armor.getMana()%>);
+									armortmp.setStrength(<%=armor.getStrength()%>);
+									armortmp.setAgility(<%=armor.getAgility()%>);
+									armortmp.setCharisma(<%=armor.getCharisma()%>);
+									questtmp.setAwardItem(armortmp);
+									<%for (ECreatureClass creatureclass : armor.getClasses())
+									{%>
+										armortmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+									<%}%>
+								<%}
+								else if (item instanceof Potion)
+								{
+									Potion potion = (Potion) item;%>
+									potiontmp = new Potion();
+									potiontmp.setName("<%=potion.getName()%>");
+									potiontmp.setAddSkill(<%=potion.getAddSkill()%>);
+									potiontmp.setSkill(ESkill.<%=potion.getSkill()%>);
+									questtmp.setAwardItem(potiontmp);
+								<%}
+								else if (item instanceof Accessory)
+								{
+									Accessory accessory = (Accessory) item;%>
+									accessorytmp = new Accessory();
+									accessorytmp.setName("<%=accessory.getName()%>");
+									<%if (accessory.getRoom()!=null)
+									{%>
+										accessorytmp.setRoom("<%=accessory.getRoom().getName()%>");
+									<%}%>
+									questtmp.setAwardItem(accessorytmp);
+								<%}
+							}%>
+							<%if (dialog.getQuest().getRoom()!=null)
+							{%>
+								//Set room on quest
+								questtmp.setRoom("<%=dialog.getQuest().getRoom().getName()%>");
+							<%}%>
+							dialogtmp.setQuest(questtmp);
+						<%}%>
+						<%if (dialog.getDialogskilltest() != null)
+						{%>
+							dialogSkillTesttmp = new DialogSkillTest();
+							dialogSkillTesttmp.setSkill(ESkill.<%=dialog.getDialogskilltest().getSkill()%>);
+							dialogSkillTesttmp.setFailText("<%=dialog.getDialogskilltest().getFailText()%>");
+							dialogSkillTesttmp.setSucessText("<%=dialog.getDialogskilltest().getSucessText()%>");
+							dialogSkillTesttmp.setGotoIdFail(<%=dialog.getDialogskilltest().getGotoIdFail()%>);
+							dialogSkillTesttmp.setGotoIdSuccess(<%=dialog.getDialogskilltest().getGotoIdSuccess()%>);
+							dialogSkillTesttmp.setSkillNPC(<%=dialog.getDialogskilltest().getSkillNPC()%>);
+							dialogtmp.setDialogskilltest(dialogSkillTesttmp);
+						<%}%>
+						<% if (dialog.isIsFinal())
+						{%>
+							dialogtmp.setFinal(<%=dialog.isIsFinal()%>);
+						<%}%>						
+						<% if (dialog.isGiveItem())
+						{%>
+							//Set item in dialog
+							<%Item item = dialog.getItem();
+							if (item instanceof Key)
+							{
+								Key key = (Key) item;%>								
+								keytmp = new Key();
+								keytmp.setId("<%=key.getId()%>");
+								keytmp.setName("<%=key.getName()%>");
+								roomeventtmp.setReceivedItem(keytmp);
+								dialogtmp.setItem(keytmp);
+							<%}
+							else if (item instanceof Gold)
+							{
+								Gold gold = (Gold) item;%>
+								goldtmp = new Gold();
+								goldtmp.setName("<%=gold.getName()%>");
+								goldtmp.setAmmount(<%=gold.getAmmount()%>);
+								dialogtmp.setItem(goldtmp);
+							<%}
+							else if (item instanceof Weapon)
+							{
+								Weapon weapon = (Weapon) item;%>
+								weapontmp = new Weapon();
+								weapontmp.setName("<%=weapon.getName()%>");
+								weapontmp.setTwohanded(<%=weapon.isIsTwohanded()%>);
+								weapontmp.setDamage(<%=weapon.getDamage()%>);
+								weapontmp.setDamageFire(<%=weapon.getDamageFire()%>);
+								weapontmp.setDamageIce(<%=weapon.getDamageIce()%>);
+								weapontmp.setDamageLightning(<%=weapon.getDamageLightning()%>);
+								weapontmp.setDamagePoison(<%=weapon.getDamagePoison()%>);
+								weapontmp.setHp(<%=weapon.getHp()%>);
+								weapontmp.setMana(<%=weapon.getMana()%>);
+								weapontmp.setStrength(<%=weapon.getStrength()%>);
+								weapontmp.setAgility(<%=weapon.getAgility()%>);
+								weapontmp.setCharisma(<%=weapon.getCharisma()%>);
+								<%for (ECreatureClass creatureclass : weapon.getClasses())
+								{%>
+								weapontmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+								<%}%>
+								dialogtmp.setItem(weapontmp);
+							<%}
+							else if (item instanceof Armor)
+							{
+								Armor armor = (Armor) item;%>
+								armortmp = new Armor();
+								armortmp.setName("<%=armor.getName()%>");
+								armortmp.setArmor(<%=armor.getArmor()%>);
+								armortmp.setArmorType(EArmorType.<%=armor.getArmorType()%>);
+								armortmp.setResistFire(<%=armor.getResistFire()%>);
+								armortmp.setResistIce(<%=armor.getResistIce()%>);
+								armortmp.setResistPoison(<%=armor.getResistPoison()%>);
+								armortmp.setResistLightning(<%=armor.getResistLightning()%>);
+								armortmp.setHp(<%=armor.getHp()%>);
+								armortmp.setMana(<%=armor.getMana()%>);
+								armortmp.setStrength(<%=armor.getStrength()%>);
+								armortmp.setAgility(<%=armor.getAgility()%>);
+								armortmp.setCharisma(<%=armor.getCharisma()%>);
+								<%for (ECreatureClass creatureclass : armor.getClasses())
+								{%>
+									armortmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+								<%}%>
+								dialogtmp.setItem(armortmp);
+							<%}	
+							else if (item instanceof Potion)
+							{
+								Potion potion = (Potion) item;%>
+								potiontmp = new Potion();
+								potiontmp.setName("<%=potion.getName()%>");
+								potiontmp.setAddSkill(<%=potion.getAddSkill()%>);
+								potiontmp.setSkill(ESkill.<%=potion.getSkill()%>);
+								dialogtmp.setItem(potiontmp);
+							<%}
+							else if (item instanceof Accessory)
+							{
+								Accessory accessory = (Accessory) item;%>
+								accessorytmp = new Accessory();
+								accessorytmp.setName("<%=accessory.getName()%>");
+								<%if (accessory.getRoom()!=null)
+								{%>
+									accessorytmp.setRoom("<%=accessory.getRoom().getName()%>");							
+								<%}%>
+								dialogtmp.setItem(accessorytmp);
+							<%}												
+						}%>						
+						dialogChoicestmp.getDialogs().add(dialogtmp);
+					<%}%>
+					dialogContmp.getConversation().add(dialogChoicestmp);
+				<%}%>
+				npctmp.setDialogcontroller(dialogContmp);
+				
+				<%for (Item item : npc.getInventory()) 
+				{%>
+					//Set items on NPC
+					<%if (item instanceof Key)
+					{
+						Key key = (Key) item;%>
+						keytmp = new Key();
+						keytmp.setId("<%=key.getId()%>");
+						keytmp.setName("<%=key.getName()%>");
+						npctmp.getInventory().add(keytmp);
+					<%}
+					else if (item instanceof Gold)
+					{
+						Gold gold = (Gold) item;%>
+						goldtmp = new Gold();
+						goldtmp.setName("<%=gold.getName()%>");
+						goldtmp.setAmmount(<%=gold.getAmmount()%>);
+						npctmp.getInventory().add(goldtmp);
+					<%}
+					else if (item instanceof Weapon)
+					{
+						Weapon weapon = (Weapon) item;%>
+						weapontmp = new Weapon();
+						weapontmp.setName("<%=weapon.getName()%>");
+						weapontmp.setTwohanded(<%=weapon.isIsTwohanded()%>);
+						weapontmp.setDamage(<%=weapon.getDamage()%>);
+						weapontmp.setDamageFire(<%=weapon.getDamageFire()%>);
+						weapontmp.setDamageIce(<%=weapon.getDamageIce()%>);
+						weapontmp.setDamageLightning(<%=weapon.getDamageLightning()%>);
+						weapontmp.setDamagePoison(<%=weapon.getDamagePoison()%>);
+						weapontmp.setHp(<%=weapon.getHp()%>);
+						weapontmp.setMana(<%=weapon.getMana()%>);
+						weapontmp.setStrength(<%=weapon.getStrength()%>);
+						weapontmp.setAgility(<%=weapon.getAgility()%>);
+						weapontmp.setCharisma(<%=weapon.getCharisma()%>);
+						<%for (ECreatureClass creatureclass : weapon.getClasses())
+						{%>
+							weapontmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+						<%}%>
+						npctmp.getInventory().add(weapontmp);
+					<%}
+					else if (item instanceof Armor)
+					{
+						Armor armor = (Armor) item;%>
+						armortmp = new Armor();
+						armortmp.setName("<%=armor.getName()%>");
+						armortmp.setArmor(<%=armor.getArmor()%>);
+						armortmp.setArmorType(EArmorType.<%=armor.getArmorType()%>);
+						armortmp.setResistFire(<%=armor.getResistFire()%>);
+						armortmp.setResistIce(<%=armor.getResistIce()%>);
+						armortmp.setResistPoison(<%=armor.getResistPoison()%>);
+						armortmp.setResistLightning(<%=armor.getResistLightning()%>);
+						armortmp.setHp(<%=armor.getHp()%>);
+						armortmp.setMana(<%=armor.getMana()%>);
+						armortmp.setStrength(<%=armor.getStrength()%>);
+						armortmp.setAgility(<%=armor.getAgility()%>);
+						armortmp.setCharisma(<%=armor.getCharisma()%>);
+						<%for (ECreatureClass creatureclass : armor.getClasses())
+						{%>
+							armortmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+						<%}%>
+						npctmp.getInventory().add(armortmp);
+					<%}
+					else if (item instanceof Potion)
+					{
+						Potion potion = (Potion) item;%>
+						potiontmp = new Potion();
+						potiontmp.setName("<%=potion.getName()%>");
+						potiontmp.setAddSkill(<%=potion.getAddSkill()%>);
+						potiontmp.setSkill(ESkill.<%=potion.getSkill()%>);
+						npctmp.getInventory().add(potiontmp);
+					<%}
+					else if (item instanceof Accessory)
+					{
+						Accessory accessory = (Accessory) item;%>
+						accessorytmp = new Accessory();
+						accessorytmp.setName("<%=accessory.getName()%>");
+						<%if (accessory.getRoom()!=null)
+						{%>
+							accessorytmp.setRoom("<%=accessory.getRoom().getName()%>");						
+						<%}%>
+						npctmp.getInventory().add(accessorytmp);
+					<%}
+				}%>	
+				
+				roomtmp.getNpcs().add(npctmp);
+			<%}%>
+						
+			<%for (Enemy enemy : room.getEnemies()) 
+			{%>
+				//Set enemies
+				enemytmp = new Enemy();
+				enemytmp.setAgility(<%=enemy.getAgility()%>);
+				enemytmp.setArmor(<%=enemy.getArmor()%>);
+				enemytmp.setAttacking(<%=enemy.isIsAttacking()%>);
+				enemytmp.setCharisma(<%=enemy.getCharisma()%>);
+				enemytmp.setCreatureClass(ECreatureClass.<%=enemy.getCreatureClass()%>);
+				enemytmp.setDamageFire(<%=enemy.getDamageFire()%>);
+				enemytmp.setDamageIce(<%=enemy.getDamageIce()%>);
+				enemytmp.setDamageLightning(<%=enemy.getDamageLightning()%>);
+				enemytmp.setDamagePoison(<%=enemy.getDamagePoison()%>);
+				enemytmp.setGold(<%=enemy.getGold()%>);
+				enemytmp.setInitPlayerActions(<%=enemy.getInitPlayerActions()%>);
+				enemytmp.setInitHp(<%=enemy.getInitHp()%>);
+				enemytmp.setInitMana(<%=enemy.getInitMana()%>);
+				enemytmp.setLevel(<%=enemy.getLevel()%>);
+				enemytmp.setMale(<%=enemy.isIsMale()%>);
+				enemytmp.setMana(<%=enemy.getMana()%>);
+				enemytmp.setName("<%=enemy.getName()%>");
+				enemytmp.setRace(ECreatureRace.<%=enemy.getRace()%>);
+				enemytmp.setResistFire(<%=enemy.getResistFire()%>);
+				enemytmp.setResistIce(<%=enemy.getResistIce()%>);
+				enemytmp.setResistLightning(<%=enemy.getResistLightning()%>);
+				enemytmp.setResistPoison(<%=enemy.getResistPoison()%>);
+				enemytmp.setScarefactor(<%=enemy.getScarefactor()%>);
+				enemytmp.setStrength(<%=enemy.getStrength()%>);	
+				enemytmp.setBoss(<%=enemy.isBoss()%>);
+				
+				<%for (Aura aura : enemy.getAuras())
+				{%>
+					auratmp = new Aura();
+					auratmp.setAuraType(EAura.<%=aura.getAuraType()%>);
+					auratmp.setAmmount(<%=aura.getAmmount()%>);
+					enemytmp.getAuras().add(auratmp);
+				<%}%>			
+				
+				<%for (Item item : enemy.getInventory()) 
+				{%>
+					//Set items on enemy
+					<%if (item instanceof Key)
+					{
+						Key key = (Key) item;%>
+						keytmp = new Key();
+						keytmp.setId("<%=key.getId()%>");
+						keytmp.setName("<%=key.getName()%>");
+						enemytmp.getInventory().add(keytmp);
+					<%}
+					else if (item instanceof Gold)
+					{
+						Gold gold = (Gold) item;%>
+						goldtmp = new Gold();
+						goldtmp.setName("<%=gold.getName()%>");
+						goldtmp.setAmmount(<%=gold.getAmmount()%>);
+						enemytmp.getInventory().add(goldtmp);
+					<%}
+					else if (item instanceof Weapon)
+					{
+						Weapon weapon = (Weapon) item;%>
+						weapontmp = new Weapon();
+						weapontmp.setName("<%=weapon.getName()%>");
+						weapontmp.setTwohanded(<%=weapon.isIsTwohanded()%>);
+						weapontmp.setDamage(<%=weapon.getDamage()%>);
+						weapontmp.setDamageFire(<%=weapon.getDamageFire()%>);
+						weapontmp.setDamageIce(<%=weapon.getDamageIce()%>);
+						weapontmp.setDamageLightning(<%=weapon.getDamageLightning()%>);
+						weapontmp.setDamagePoison(<%=weapon.getDamagePoison()%>);
+						weapontmp.setHp(<%=weapon.getHp()%>);
+						weapontmp.setMana(<%=weapon.getMana()%>);
+						weapontmp.setStrength(<%=weapon.getStrength()%>);
+						weapontmp.setAgility(<%=weapon.getAgility()%>);
+						weapontmp.setCharisma(<%=weapon.getCharisma()%>);
+						<%for (ECreatureClass creatureclass : weapon.getClasses())
+						{%>
+							weapontmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+						<%}%>
+						enemytmp.getInventory().add(weapontmp);
+					<%}
+					else if (item instanceof Armor)
+					{
+						Armor armor = (Armor) item;%>
+						armortmp = new Armor();
+						armortmp.setName("<%=armor.getName()%>");
+						armortmp.setArmor(<%=armor.getArmor()%>);
+						armortmp.setArmorType(EArmorType.<%=armor.getArmorType()%>);
+						armortmp.setResistFire(<%=armor.getResistFire()%>);
+						armortmp.setResistIce(<%=armor.getResistIce()%>);
+						armortmp.setResistPoison(<%=armor.getResistPoison()%>);
+						armortmp.setResistLightning(<%=armor.getResistLightning()%>);
+						armortmp.setHp(<%=armor.getHp()%>);
+						armortmp.setMana(<%=armor.getMana()%>);
+						armortmp.setStrength(<%=armor.getStrength()%>);
+						armortmp.setAgility(<%=armor.getAgility()%>);
+						armortmp.setCharisma(<%=armor.getCharisma()%>);
+						<%for (ECreatureClass creatureclass : armor.getClasses())
+						{%>
+							armortmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+						<%}%>
+						enemytmp.getInventory().add(armortmp);
+					<%}
+					else if (item instanceof Potion)
+					{
+						Potion potion = (Potion) item;%>
+						potiontmp = new Potion();
+						potiontmp.setName("<%=potion.getName()%>");
+						potiontmp.setAddSkill(<%=potion.getAddSkill()%>);
+						potiontmp.setSkill(ESkill.<%=potion.getSkill()%>);
+						enemytmp.getInventory().add(potiontmp);
+					<%}
+					else if (item instanceof Accessory)
+					{
+						Accessory accessory = (Accessory) item;%>
+						accessorytmp = new Accessory();
+						accessorytmp.setName("<%=accessory.getName()%>");
+						<%if (accessory.getRoom()!=null)
+						{%>
+							accessorytmp.setRoom("<%=accessory.getRoom().getName()%>");						
+						<%}%>
+						enemytmp.getInventory().add(accessorytmp);
+					<%}
+				}%>							
+				roomtmp.getEnemies().add(enemytmp);
+			<%}			
+			if (room instanceof FinalRoom)
+			{
+				FinalRoom finalroom = (FinalRoom) room;
+			%>				
+				((FinalRoom)roomtmp).setFinal(<%=finalroom.isIsFinal()%>);
+			<%}%>
+			
+			<%for (RoomEvent roomevent : ((EventRoom)room).getEvents())
+			{%>
+				//Create RoomEvent
+				roomeventtmp = new RoomEvent();
+				roomeventtmp.setCondition(ERoomEventCondition.<%=roomevent.getCondition()%>);
+				roomeventtmp.setAction(ERoomEventAction.<%=roomevent.getAction()%>);
+				roomeventtmp.setHP(<%=roomevent.getHP()%>);
+				<%if (roomevent.getNpc()!=null)
+				{%>
+					roomeventtmp.setNpc("<%=roomevent.getNpc().getName()%>");
+				<%}%>
+				roomeventtmp.setEnemyDead(<%=roomevent.isIsEnemyDead()%>);
+				<% if (roomevent.getHiddenroomfound() != null)
+				{%>
+					roomeventtmp.setHiddenroomfound("<%=roomevent.getHiddenroomfound().getName()%>");
+				<%}%>
+				roomeventtmp.setItemtaken(<%=roomevent.isIsItemtaken()%>);
+				roomeventtmp.setItemused(<%=roomevent.isIsItemused()%>);
+				roomeventtmp.setRoomdescription("<%=roomevent.getRoomdescription()%>");
+				roomeventtmp.setRoomenteredtimes(<%=roomevent.getRoomenteredtimes()%>);
+				roomeventtmp.setTrapdescription("<%=roomevent.getTrapdescription()%>");
+				<%if (roomevent.getNpcGotoId() != 0)
+				{%>
+					roomeventtmp.setNpcGotoId(<%=roomevent.getNpcGotoId()%>);
+				<%}
+				if (roomevent.getRoom() != null)
+				{%>
+					roomeventtmp.setRoom("<%=roomevent.getRoom().getName()%>");
+				<%}%>
+				
+				<%if (roomevent.getEnemyattack() != null)
+				{%>
+					roomeventtmp.setEnemyattack("<%=roomevent.getEnemyattack().getName()%>");
+				<%}%>
+				
+				<%if (roomevent.getPlaceenemy() != null)
+				{
+					Enemy enemy = roomevent.getPlaceenemy();%>
+					//Creating enemy in roomevent					
+					enemytmp = new Enemy();
+					enemytmp.setAgility(<%=enemy.getAgility()%>);
+					enemytmp.setArmor(<%=enemy.getArmor()%>);
+					enemytmp.setAttacking(<%=enemy.isIsAttacking()%>);
+					enemytmp.setCharisma(<%=enemy.getCharisma()%>);
+					enemytmp.setCreatureClass(ECreatureClass.<%=enemy.getCreatureClass()%>);
+					enemytmp.setDamageFire(<%=enemy.getDamageFire()%>);
+					enemytmp.setDamageIce(<%=enemy.getDamageIce()%>);
+					enemytmp.setDamageLightning(<%=enemy.getDamageLightning()%>);
+					enemytmp.setDamagePoison(<%=enemy.getDamagePoison()%>);
+					enemytmp.setGold(<%=enemy.getGold()%>);
+					enemytmp.setInitPlayerActions(<%=enemy.getInitPlayerActions()%>);
+					enemytmp.setInitHp(<%=enemy.getInitHp()%>);
+					enemytmp.setInitMana(<%=enemy.getInitMana()%>);
+					enemytmp.setLevel(<%=enemy.getLevel()%>);
+					enemytmp.setMale(<%=enemy.isIsMale()%>);
+					enemytmp.setMana(<%=enemy.getMana()%>);
+					enemytmp.setName("<%=enemy.getName()%>");
+					enemytmp.setRace(ECreatureRace.<%=enemy.getRace()%>);
+					enemytmp.setResistFire(<%=enemy.getResistFire()%>);
+					enemytmp.setResistIce(<%=enemy.getResistIce()%>);
+					enemytmp.setResistLightning(<%=enemy.getResistLightning()%>);
+					enemytmp.setResistPoison(<%=enemy.getResistPoison()%>);
+					enemytmp.setScarefactor(<%=enemy.getScarefactor()%>);
+					enemytmp.setStrength(<%=enemy.getStrength()%>);
+					enemytmp.setBoss(<%=enemy.isBoss()%>);
+					
+					<%for (Aura aura : enemy.getAuras())
+					{%>
+						auratmp = new Aura();
+						auratmp.setAuraType(EAura.<%=aura.getAuraType()%>);
+						auratmp.setAmmount(<%=aura.getAmmount()%>);
+						enemytmp.getAuras().add(auratmp);
+					<%}%>
+					
+					<%for (Item item : roomevent.getPlaceenemy().getInventory()) 
+					{%>
+						//Set items on enemy in roomevent
+						<%if (item instanceof Key)
+						{
+							Key key = (Key) item;%>
+							keytmp = new Key();
+							keytmp.setId("<%=key.getId()%>");
+							keytmp.setName("<%=key.getName()%>");
+							enemytmp.getInventory().add(keytmp);
+						<%}
+						else if (item instanceof Gold)
+						{
+							Gold gold = (Gold) item;%>
+							goldtmp = new Gold();
+							goldtmp.setName("<%=gold.getName()%>");
+							goldtmp.setAmmount(<%=gold.getAmmount()%>);
+							enemytmp.getInventory().add(goldtmp);
+						<%}
+						else if (item instanceof Weapon)
+						{
+							Weapon weapon = (Weapon) item;%>
+							weapontmp = new Weapon();
+							weapontmp.setName("<%=weapon.getName()%>");
+							weapontmp.setTwohanded(<%=weapon.isIsTwohanded()%>);
+							weapontmp.setDamage(<%=weapon.getDamage()%>);
+							weapontmp.setDamageFire(<%=weapon.getDamageFire()%>);
+							weapontmp.setDamageIce(<%=weapon.getDamageIce()%>);
+							weapontmp.setDamageLightning(<%=weapon.getDamageLightning()%>);
+							weapontmp.setDamagePoison(<%=weapon.getDamagePoison()%>);
+							weapontmp.setHp(<%=weapon.getHp()%>);
+							weapontmp.setMana(<%=weapon.getMana()%>);
+							weapontmp.setStrength(<%=weapon.getStrength()%>);
+							weapontmp.setAgility(<%=weapon.getAgility()%>);
+							weapontmp.setCharisma(<%=weapon.getCharisma()%>);
+							<%for (ECreatureClass creatureclass : weapon.getClasses())
+							{%>
+								weapontmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+							<%}%>
+							enemytmp.getInventory().add(weapontmp);
+						<%}
+						else if (item instanceof Armor)
+						{
+							Armor armor = (Armor) item;%>
+							armortmp = new Armor();
+							armortmp.setName("<%=armor.getName()%>");
+							armortmp.setArmor(<%=armor.getArmor()%>);
+							armortmp.setArmorType(EArmorType.<%=armor.getArmorType()%>);
+							armortmp.setResistFire(<%=armor.getResistFire()%>);
+							armortmp.setResistIce(<%=armor.getResistIce()%>);
+							armortmp.setResistPoison(<%=armor.getResistPoison()%>);
+							armortmp.setResistLightning(<%=armor.getResistLightning()%>);
+							armortmp.setHp(<%=armor.getHp()%>);
+							armortmp.setMana(<%=armor.getMana()%>);
+							armortmp.setStrength(<%=armor.getStrength()%>);
+							armortmp.setAgility(<%=armor.getAgility()%>);
+							armortmp.setCharisma(<%=armor.getCharisma()%>);
+							<%for (ECreatureClass creatureclass : armor.getClasses())
+							{%>
+								armortmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+							<%}%>
+							enemytmp.getInventory().add(armortmp);
+						<%}
+						else if (item instanceof Potion)
+						{
+							Potion potion = (Potion) item;%>
+							potiontmp = new Potion();
+							potiontmp.setName("<%=potion.getName()%>");
+							potiontmp.setAddSkill(<%=potion.getAddSkill()%>);
+							potiontmp.setSkill(ESkill.<%=potion.getSkill()%>);
+							enemytmp.getInventory().add(potiontmp);
+						<%}
+						else if (item instanceof Accessory)
+						{
+							Accessory accessory = (Accessory) item;%>
+							accessorytmp = new Accessory();
+							accessorytmp.setName("<%=accessory.getName()%>");
+							<%if (accessory.getRoom()!=null)
+							{%>
+								accessorytmp.setRoom("<%=accessory.getRoom().getName()%>");						
+							<%}%>
+							enemytmp.getInventory().add(accessorytmp);
+						<%}
+					}%>
+					roomeventtmp.setPlaceenemy(enemytmp);	
+				<%}%>		
+								
+				<%if (roomevent.getItemtaken() != null)
+				{
+					Item item = roomevent.getItemtaken();%>
+					//Set itemtaken in roomevent										
+					<%if (item instanceof Key)
+					{
+						Key key = (Key) item;%>
+						keytmp = new Key();
+						keytmp.setId("<%=key.getId()%>");
+						keytmp.setName("<%=key.getName()%>");
+						roomeventtmp.setItemtaken(keytmp);
+					<%}
+					else if (item instanceof Gold)
+					{
+						Gold gold = (Gold) item;%>
+						goldtmp = new Gold();
+						goldtmp.setName("<%=gold.getName()%>");
+						goldtmp.setAmmount(<%=gold.getAmmount()%>);
+						roomeventtmp.setItemtaken(goldtmp);
+					<%}
+					else if (item instanceof Weapon)
+					{
+						Weapon weapon = (Weapon) item;%>
+						weapontmp = new Weapon();
+						weapontmp.setName("<%=weapon.getName()%>");
+						weapontmp.setTwohanded(<%=weapon.isIsTwohanded()%>);
+						weapontmp.setDamage(<%=weapon.getDamage()%>);
+						weapontmp.setDamageFire(<%=weapon.getDamageFire()%>);
+						weapontmp.setDamageIce(<%=weapon.getDamageIce()%>);
+						weapontmp.setDamageLightning(<%=weapon.getDamageLightning()%>);
+						weapontmp.setDamagePoison(<%=weapon.getDamagePoison()%>);
+						weapontmp.setHp(<%=weapon.getHp()%>);
+						weapontmp.setMana(<%=weapon.getMana()%>);
+						weapontmp.setStrength(<%=weapon.getStrength()%>);
+						weapontmp.setAgility(<%=weapon.getAgility()%>);
+						weapontmp.setCharisma(<%=weapon.getCharisma()%>);
+						<%for (ECreatureClass creatureclass : weapon.getClasses())
+						{%>
+							weapontmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+						<%}%>
+						roomeventtmp.setItemtaken(weapontmp);
+					<%}
+					else if (item instanceof Armor)
+					{
+						Armor armor = (Armor) item;%>
+						armortmp = new Armor();
+						armortmp.setName("<%=armor.getName()%>");
+						armortmp.setArmor(<%=armor.getArmor()%>);
+						armortmp.setArmorType(EArmorType.<%=armor.getArmorType()%>);
+						armortmp.setResistFire(<%=armor.getResistFire()%>);
+						armortmp.setResistIce(<%=armor.getResistIce()%>);
+						armortmp.setResistPoison(<%=armor.getResistPoison()%>);
+						armortmp.setResistLightning(<%=armor.getResistLightning()%>);
+						armortmp.setHp(<%=armor.getHp()%>);
+						armortmp.setMana(<%=armor.getMana()%>);
+						armortmp.setStrength(<%=armor.getStrength()%>);
+						armortmp.setAgility(<%=armor.getAgility()%>);
+						armortmp.setCharisma(<%=armor.getCharisma()%>);
+						<%for (ECreatureClass creatureclass : armor.getClasses())
+						{%>
+							armortmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+						<%}%>
+						roomeventtmp.setItemtaken(armortmp);
+					<%}
+					else if (item instanceof Potion)
+					{
+						Potion potion = (Potion) item;%>
+						potiontmp = new Potion();
+						potiontmp.setName("<%=potion.getName()%>");
+						potiontmp.setAddSkill(<%=potion.getAddSkill()%>);
+						potiontmp.setSkill(ESkill.<%=potion.getSkill()%>);
+						roomeventtmp.setItemtaken(potiontmp);
+					<%}
+					else if (item instanceof Accessory)
+					{
+						Accessory accessory = (Accessory) item;%>
+						accessorytmp = new Accessory();
+						accessorytmp.setName("<%=accessory.getName()%>");
+						<%if (accessory.getRoom()!=null)
+						{%>
+							accessorytmp.setRoom("<%=accessory.getRoom().getName()%>");						
+						<%}%>
+						roomeventtmp.setItemtaken(accessorytmp);
+					<%}
+				}%>
+				
+				<%if (roomevent.getReceivedItem() != null)
+				{%>
+					//Set receiveditem in roomevent
+					<%Item item = roomevent.getReceivedItem();
+					if (item instanceof Key)
+					{
+						Key key = (Key) item;%>						
+						keytmp = new Key();
+						keytmp.setId("<%=key.getId()%>");
+						keytmp.setName("<%=key.getName()%>");
+						roomeventtmp.setReceivedItem(keytmp);
+					<%}
+					else if (item instanceof Gold)
+					{
+						Gold gold = (Gold) item;%>
+						goldtmp = new Gold();
+						goldtmp.setName("<%=gold.getName()%>");
+						goldtmp.setAmmount(<%=gold.getAmmount()%>);
+						roomeventtmp.setReceivedItem(goldtmp);
+					<%}
+					else if (item instanceof Weapon)
+					{
+						Weapon weapon = (Weapon) item;%>
+						weapontmp = new Weapon();
+						weapontmp.setName("<%=weapon.getName()%>");
+						weapontmp.setTwohanded(<%=weapon.isIsTwohanded()%>);
+						weapontmp.setDamage(<%=weapon.getDamage()%>);
+						weapontmp.setDamageFire(<%=weapon.getDamageFire()%>);
+						weapontmp.setDamageIce(<%=weapon.getDamageIce()%>);
+						weapontmp.setDamageLightning(<%=weapon.getDamageLightning()%>);
+						weapontmp.setDamagePoison(<%=weapon.getDamagePoison()%>);
+						weapontmp.setHp(<%=weapon.getHp()%>);
+						weapontmp.setMana(<%=weapon.getMana()%>);
+						weapontmp.setStrength(<%=weapon.getStrength()%>);
+						weapontmp.setAgility(<%=weapon.getAgility()%>);
+						weapontmp.setCharisma(<%=weapon.getCharisma()%>);
+						<%for (ECreatureClass creatureclass : weapon.getClasses())
+						{%>
+							weapontmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+						<%}%>
+						roomeventtmp.setReceivedItem(weapontmp);
+					<%}
+					else if (item instanceof Armor)
+					{
+						Armor armor = (Armor) item;%>
+						armortmp = new Armor();
+						armortmp.setName("<%=armor.getName()%>");
+						armortmp.setArmor(<%=armor.getArmor()%>);
+						armortmp.setArmorType(EArmorType.<%=armor.getArmorType()%>);
+						armortmp.setResistFire(<%=armor.getResistFire()%>);
+						armortmp.setResistIce(<%=armor.getResistIce()%>);
+						armortmp.setResistPoison(<%=armor.getResistPoison()%>);
+						armortmp.setResistLightning(<%=armor.getResistLightning()%>);
+						armortmp.setHp(<%=armor.getHp()%>);
+						armortmp.setMana(<%=armor.getMana()%>);
+						armortmp.setStrength(<%=armor.getStrength()%>);
+						armortmp.setAgility(<%=armor.getAgility()%>);
+						armortmp.setCharisma(<%=armor.getCharisma()%>);
+						<%for (ECreatureClass creatureclass : armor.getClasses())
+						{%>
+							armortmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+						<%}%>
+						roomeventtmp.setReceivedItem(armortmp);
+					<%}
+					else if (item instanceof Potion)
+					{
+						Potion potion = (Potion) item;%>
+						potiontmp = new Potion();
+						potiontmp.setName("<%=potion.getName()%>");
+						potiontmp.setAddSkill(<%=potion.getAddSkill()%>);
+						potiontmp.setSkill(ESkill.<%=potion.getSkill()%>);
+						roomeventtmp.setReceivedItem(potiontmp);
+					<%}
+					else if (item instanceof Accessory)
+					{
+						Accessory accessory = (Accessory) item;%>
+						accessorytmp = new Accessory();
+						accessorytmp.setName("<%=accessory.getName()%>");
+						<%if (accessory.getRoom()!=null)
+						{%>
+							accessorytmp.setRoom("<%=accessory.getRoom().getName()%>");
+						<%}%>
+						roomeventtmp.setReceivedItem(accessorytmp);
+					<%}
+				}%>
+								
+				<%if (roomevent.getItemUsed() != null)
+				{%>
+					//Set Itemused in roomevent
+					<%Item item = roomevent.getItemUsed();
+					if (item instanceof Key)
+					{
+						Key key = (Key) item;%>						
+						keytmp = new Key();
+						keytmp.setId("<%=key.getId()%>");
+						keytmp.setName("<%=key.getName()%>");
+						roomeventtmp.setItemUsed(keytmp);
+					<%}
+					else if (item instanceof Gold)
+					{
+						Gold gold = (Gold) item;%>
+						goldtmp = new Gold();
+						goldtmp.setName("<%=gold.getName()%>");
+						goldtmp.setAmmount(<%=gold.getAmmount()%>);
+						roomeventtmp.setItemUsed(goldtmp);
+					<%}
+					else if (item instanceof Weapon)
+					{
+						Weapon weapon = (Weapon) item;%>
+						weapontmp = new Weapon();
+						weapontmp.setName("<%=weapon.getName()%>");
+						weapontmp.setTwohanded(<%=weapon.isIsTwohanded()%>);
+						weapontmp.setDamage(<%=weapon.getDamage()%>);
+						weapontmp.setDamageFire(<%=weapon.getDamageFire()%>);
+						weapontmp.setDamageIce(<%=weapon.getDamageIce()%>);
+						weapontmp.setDamageLightning(<%=weapon.getDamageLightning()%>);
+						weapontmp.setDamagePoison(<%=weapon.getDamagePoison()%>);
+						weapontmp.setHp(<%=weapon.getHp()%>);
+						weapontmp.setMana(<%=weapon.getMana()%>);
+						weapontmp.setStrength(<%=weapon.getStrength()%>);
+						weapontmp.setAgility(<%=weapon.getAgility()%>);
+						weapontmp.setCharisma(<%=weapon.getCharisma()%>);
+						<%for (ECreatureClass creatureclass : weapon.getClasses())
+						{%>
+							weapontmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+						<%}%>
+						roomeventtmp.setItemUsed(weapontmp);
+					<%}
+					else if (item instanceof Armor)
+					{
+						Armor armor = (Armor) item;%>
+						armortmp = new Armor();
+						armortmp.setName("<%=armor.getName()%>");
+						armortmp.setArmor(<%=armor.getArmor()%>);
+						armortmp.setArmorType(EArmorType.<%=armor.getArmorType()%>);
+						armortmp.setResistFire(<%=armor.getResistFire()%>);
+						armortmp.setResistIce(<%=armor.getResistIce()%>);
+						armortmp.setResistPoison(<%=armor.getResistPoison()%>);
+						armortmp.setResistLightning(<%=armor.getResistLightning()%>);
+						armortmp.setHp(<%=armor.getHp()%>);
+						armortmp.setMana(<%=armor.getMana()%>);
+						armortmp.setStrength(<%=armor.getStrength()%>);
+						armortmp.setAgility(<%=armor.getAgility()%>);
+						armortmp.setCharisma(<%=armor.getCharisma()%>);
+						<%for (ECreatureClass creatureclass : armor.getClasses())
+						{%>
+							armortmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+						<%}%>
+						roomeventtmp.setItemUsed(armortmp);
+					<%}
+					else if (item instanceof Potion)
+					{
+						Potion potion = (Potion) item;%>
+						potiontmp = new Potion();
+						potiontmp.setName("<%=potion.getName()%>");
+						potiontmp.setAddSkill(<%=potion.getAddSkill()%>);
+						potiontmp.setSkill(ESkill.<%=potion.getSkill()%>);
+						roomeventtmp.setItemUsed(potiontmp);
+					<%}
+					else if (item instanceof Accessory)
+					{
+						Accessory accessory = (Accessory) item;%>
+						accessorytmp = new Accessory();
+						accessorytmp.setName("<%=accessory.getName()%>");
+						<%if (accessory.getRoom()!=null)
+						{%>
+							accessorytmp.setRoom("<%=accessory.getRoom().getName()%>");
+						<%}%>
+						roomeventtmp.setItemUsed(accessorytmp);
+					<%}
+				}%>
+	
+				<%if (roomevent.getTrap() != null)
+				{
+					Trap trap = roomevent.getTrap();%>
+					//Set trap in roomevent
+					traptmp = new Trap();
+					traptmp.setFire(<%=trap.getFire()%>);
+					traptmp.setLightning(<%=trap.getLightning()%>);
+					traptmp.setIce(<%=trap.getIce()%>);
+					traptmp.setPoison(<%=trap.getPoison()%>);
+					traptmp.setNormal(<%=trap.getNormal()%>);
+					traptmp.setTrapagility(<%=trap.getTrapagility()%>);
+					traptmp.setTrapdescription("<%=trap.getTrapdescription()%>");
+					traptmp.setType(EElement.<%=trap.getType()%>);
+					roomeventtmp.setTrap(traptmp);
+				<%}%>
+				<%if (roomevent.getQuest() != null)
+				{%>
+					//Set Quest on roomevent
+					questtmp = new Quest();
+					questtmp.setId(<%=roomevent.getQuest().getId()%>);
+					questtmp.setIntroduction("<%=roomevent.getQuest().getIntroduction()%>");
+					questtmp.setDescription("<%=roomevent.getQuest().getDescription()%>");
+					questtmp.setCompleteText("<%=roomevent.getQuest().getCompleteText()%>");
+					questtmp.setXpEarned(<%=roomevent.getQuest().getXpEarned()%>);
+					questtmp.setQuestCondition(ERoomEventCondition.<%=roomevent.getQuest().getQuestCondition()%>);
+					<%if (roomevent.getQuest().getNpcGivenby() != null)
+					{%>
+						questtmp.setNpcGivenby("<%=roomevent.getQuest().getNpcGivenby().getName()%>");
+					<%}%>
+					<%if (roomevent.getQuest().getEnemydead() != null)
+					{%>
+						questtmp.setEnemydead("<%=roomevent.getQuest().getEnemydead().getName()%>");
+					<%}%>
+					questtmp.setDialogid(<%=roomevent.getQuest().getDialogid()%>);
+						
+					//Set item on quest
+					<%if (roomevent.getQuest().getQuestItem() != null)
+					{%>
+						questtmp.setQuestItem("<%=roomevent.getQuest().getQuestItem().getName()%>");
+					<%}%>
+						
+					//Set award item on quest
+					<%if (roomevent.getQuest().getAwardItem() != null)
+					{
+						Item item = roomevent.getQuest().getAwardItem();
+						if (item instanceof Key)
+						{
+							Key key = (Key) item;%>
+							keytmp = new Key();
+							keytmp.setId("<%=key.getId()%>");
+							keytmp.setName("<%=key.getName()%>");
+							questtmp.setAwardItem(keytmp);
+						<%}
+						else if (item instanceof Gold)
+						{
+							Gold gold = (Gold) item;%>
+							goldtmp = new Gold();
+							goldtmp.setName("<%=gold.getName()%>");
+							goldtmp.setAmmount(<%=gold.getAmmount()%>);
+							questtmp.setAwardItem(goldtmp);
+						<%}
+						else if (item instanceof Weapon)
+						{
+							Weapon weapon = (Weapon) item;%>
+							weapontmp = new Weapon();
+							weapontmp.setName("<%=weapon.getName()%>");
+							weapontmp.setTwohanded(<%=weapon.isIsTwohanded()%>);
+							weapontmp.setDamage(<%=weapon.getDamage()%>);
+							weapontmp.setDamageFire(<%=weapon.getDamageFire()%>);
+							weapontmp.setDamageIce(<%=weapon.getDamageIce()%>);
+							weapontmp.setDamageLightning(<%=weapon.getDamageLightning()%>);
+							weapontmp.setDamagePoison(<%=weapon.getDamagePoison()%>);
+							weapontmp.setHp(<%=weapon.getHp()%>);
+							weapontmp.setMana(<%=weapon.getMana()%>);
+							weapontmp.setStrength(<%=weapon.getStrength()%>);
+							weapontmp.setAgility(<%=weapon.getAgility()%>);
+							weapontmp.setCharisma(<%=weapon.getCharisma()%>);
+							<%for (ECreatureClass creatureclass : weapon.getClasses())
+							{%>
+								weapontmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+							<%}%>
+							questtmp.setAwardItem(weapontmp);
+						<%}
+						else if (item instanceof Armor)
+						{
+							Armor armor = (Armor) item;%>
+							armortmp = new Armor();
+							armortmp.setName("<%=armor.getName()%>");
+							armortmp.setArmor(<%=armor.getArmor()%>);
+							armortmp.setArmorType(EArmorType.<%=armor.getArmorType()%>);
+							armortmp.setResistFire(<%=armor.getResistFire()%>);
+							armortmp.setResistIce(<%=armor.getResistIce()%>);
+							armortmp.setResistPoison(<%=armor.getResistPoison()%>);
+							armortmp.setResistLightning(<%=armor.getResistLightning()%>);
+							armortmp.setHp(<%=armor.getHp()%>);
+							armortmp.setMana(<%=armor.getMana()%>);
+							armortmp.setStrength(<%=armor.getStrength()%>);
+							armortmp.setAgility(<%=armor.getAgility()%>);
+							armortmp.setCharisma(<%=armor.getCharisma()%>);
+							<%for (ECreatureClass creatureclass : armor.getClasses())
+							{%>
+								armortmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+							<%}%>
+							questtmp.setAwardItem(armortmp);
+						<%}
+						else if (item instanceof Potion)
+						{
+							Potion potion = (Potion) item;%>
+							potiontmp = new Potion();
+							potiontmp.setName("<%=potion.getName()%>");
+							potiontmp.setAddSkill(<%=potion.getAddSkill()%>);
+							potiontmp.setSkill(ESkill.<%=potion.getSkill()%>);
+							questtmp.setAwardItem(potiontmp);
+						<%}
+						else if (item instanceof Accessory)
+						{
+							Accessory accessory = (Accessory) item;%>
+							accessorytmp = new Accessory();
+							accessorytmp.setName("<%=accessory.getName()%>");
+							<%if (accessory.getRoom()!=null)
+							{%>
+								accessorytmp.setRoom("<%=accessory.getRoom().getName()%>");
+							<%}%>
+							questtmp.setAwardItem(accessorytmp);
+						<%}
+					}%>
+					<%if (roomevent.getQuest().getRoom()!=null)
+					{%>
+						//Set room on quest
+						questtmp.setRoom("<%=roomevent.getQuest().getRoom().getName()%>");
+					<%}%>
+					//Add quest to roomevent
+					roomeventtmp.setQuest(questtmp);
+				<%}%>
+				//Add roomevent
+				roomtmp.getEvents().add(roomeventtmp);		
+			<%}%>
+			
+			<%if (((EventRoom)room).getQuest() != null)
+			{%>
+				//Set Quest when entering room
+				questtmp = new Quest();
+				questtmp.setId(<%=((EventRoom)room).getQuest().getId()%>);
+				questtmp.setIntroduction("<%=((EventRoom)room).getQuest().getIntroduction()%>");
+				questtmp.setDescription("<%=((EventRoom)room).getQuest().getDescription()%>");
+				questtmp.setCompleteText("<%=((EventRoom)room).getQuest().getCompleteText()%>");
+				questtmp.setXpEarned(<%=((EventRoom)room).getQuest().getXpEarned()%>);
+				questtmp.setQuestCondition(ERoomEventCondition.<%=((EventRoom)room).getQuest().getQuestCondition()%>);
+			<%if (((EventRoom)room).getQuest().getNpcGivenby() != null)
+			{%>
+				questtmp.setNpcGivenby("<%=((EventRoom)room).getQuest().getNpcGivenby().getName()%>");
+			<%}%>
+			<%if (((EventRoom)room).getQuest().getEnemydead() != null)
+			{%>
+				questtmp.setEnemydead("<%=((EventRoom)room).getQuest().getEnemydead().getName()%>");
+			<%}%>
+				questtmp.setDialogid(<%=((EventRoom)room).getQuest().getDialogid()%>);
+				
+				//Set item on quest
+				<%if (((EventRoom)room).getQuest().getQuestItem() != null)
+				{%>
+					questtmp.setQuestItem("<%=((EventRoom)room).getQuest().getQuestItem().getName()%>");
+				<%}%>
+				
+				//Set award item on quest
+				<%if (((EventRoom)room).getQuest().getAwardItem() != null)
+				{
+					Item item = ((EventRoom)room).getQuest().getAwardItem();
+					if (item instanceof Key)
+					{
+						Key key = (Key) item;%>
+						keytmp = new Key();
+						keytmp.setId("<%=key.getId()%>");
+						keytmp.setName("<%=key.getName()%>");
+						questtmp.setAwardItem(keytmp);
+					<%}
+					else if (item instanceof Gold)
+					{
+						Gold gold = (Gold) item;%>
+						goldtmp = new Gold();
+						goldtmp.setName("<%=gold.getName()%>");
+						goldtmp.setAmmount(<%=gold.getAmmount()%>);
+						questtmp.setAwardItem(goldtmp);
+					<%}
+					else if (item instanceof Weapon)
+					{
+						Weapon weapon = (Weapon) item;%>
+						weapontmp = new Weapon();
+						weapontmp.setName("<%=weapon.getName()%>");
+						weapontmp.setTwohanded(<%=weapon.isIsTwohanded()%>);
+						weapontmp.setDamage(<%=weapon.getDamage()%>);
+						weapontmp.setDamageFire(<%=weapon.getDamageFire()%>);
+						weapontmp.setDamageIce(<%=weapon.getDamageIce()%>);
+						weapontmp.setDamageLightning(<%=weapon.getDamageLightning()%>);
+						weapontmp.setDamagePoison(<%=weapon.getDamagePoison()%>);
+						weapontmp.setHp(<%=weapon.getHp()%>);
+						weapontmp.setMana(<%=weapon.getMana()%>);
+						weapontmp.setStrength(<%=weapon.getStrength()%>);
+						weapontmp.setAgility(<%=weapon.getAgility()%>);
+						weapontmp.setCharisma(<%=weapon.getCharisma()%>);
+						<%for (ECreatureClass creatureclass : weapon.getClasses())
+						{%>
+							weapontmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+						<%}%>
+						questtmp.setAwardItem(weapontmp);
+					<%}
+					else if (item instanceof Armor)
+					{
+						Armor armor = (Armor) item;%>
+						armortmp = new Armor();
+						armortmp.setName("<%=armor.getName()%>");
+						armortmp.setArmor(<%=armor.getArmor()%>);
+						armortmp.setArmorType(EArmorType.<%=armor.getArmorType()%>);
+						armortmp.setResistFire(<%=armor.getResistFire()%>);
+						armortmp.setResistIce(<%=armor.getResistIce()%>);
+						armortmp.setResistPoison(<%=armor.getResistPoison()%>);
+						armortmp.setResistLightning(<%=armor.getResistLightning()%>);
+						armortmp.setHp(<%=armor.getHp()%>);
+						armortmp.setMana(<%=armor.getMana()%>);
+						armortmp.setStrength(<%=armor.getStrength()%>);
+						armortmp.setAgility(<%=armor.getAgility()%>);
+						armortmp.setCharisma(<%=armor.getCharisma()%>);
+						<%for (ECreatureClass creatureclass : armor.getClasses())
+						{%>
+							armortmp.getClasses().add(ECreatureClass.<%=creatureclass%>);
+						<%}%>
+						questtmp.setAwardItem(armortmp);
+					<%}
+					else if (item instanceof Potion)
+					{
+						Potion potion = (Potion) item;%>
+						potiontmp = new Potion();
+						potiontmp.setName("<%=potion.getName()%>");
+						potiontmp.setAddSkill(<%=potion.getAddSkill()%>);
+						potiontmp.setSkill(ESkill.<%=potion.getSkill()%>);
+						questtmp.setAwardItem(potiontmp);
+					<%}
+					else if (item instanceof Accessory)
+					{
+						Accessory accessory = (Accessory) item;%>
+						accessorytmp = new Accessory();
+						accessorytmp.setName("<%=accessory.getName()%>");
+						<%if (accessory.getRoom()!=null)
+						{%>
+							accessorytmp.setRoom("<%=accessory.getRoom().getName()%>");
+						<%}%>
+						questtmp.setAwardItem(accessorytmp);
+					<%}
+				}%>	
+				<%if (((EventRoom)room).getQuest().getRoom()!=null)
+				{%>
+					//Set room on quest
+					questtmp.setRoom("<%=((EventRoom)room).getQuest().getRoom().getName()%>");
+				<%}%>
+				roomtmp.setQuest(questtmp);
+			<%}%>
+							
+			//Add room to world list
+			world.put(roomtmp.getName(), roomtmp);
+		<%}%>
+		
+		//Place player into world
+		//TODO: Change currentroom for debugging
+		Engine.engine.getPlayer().setCurrentroom(firstroom);
+		
+		//Add world to engine
+		Engine.engine.getPlayer().setWorld(world);
+		
+		//Set firstroom in world
+		Engine.engine.setFirstroom(firstroom);
+		
+		//Set act
+		Engine.engine.getPlayer().setAct(this);
+	}
+	@Override
+	public String getActName() {
+		return actName;
+	}
+	@Override
+	public Act getGotoAct() {
+		return gotoAct;
+	}
+	@Override
+	public String getDescription() {
+		return description;
+	}
+}

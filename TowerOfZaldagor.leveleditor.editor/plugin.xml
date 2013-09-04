@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="TowerOfZaldagor"
+            name="Tower of Zaldagor"/>
+      <wizard
+            id="Leveleditor.presentation.LeveleditorModelWizardID"
+            name="Act Editor"
+            class="Leveleditor.presentation.LeveleditorModelWizard"
+            category="TowerOfZaldagor"
+            icon="icons/full/obj16/ic_launcher_dragonicon5.png">
+         <description>%_UI_LeveleditorModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="Leveleditor.presentation.LeveleditorEditorID"
+            name="Act Editor"
+            icon="icons/full/obj16/actIcon.png"
+            extensions="leveleditor"
+            class="Leveleditor.presentation.LeveleditorEditor"
+            contributorClass="Leveleditor.presentation.LeveleditorActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>
